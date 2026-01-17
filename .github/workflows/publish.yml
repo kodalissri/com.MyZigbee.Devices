@@ -34,4 +34,4 @@ jobs:
         HOMEY_BEARER_TOKEN: ${{ secrets.HOMEY_TOKEN }}
       run: |
         echo "Publishing app to Homey App Store..."
-        homey app publish
+        homey app publish --no-update
