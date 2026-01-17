@@ -1,4 +1,4 @@
-# Naresh Personal - Homey App
+MyZigbee Devices - Homey App
 
 Add Support for Missing Devices
 
