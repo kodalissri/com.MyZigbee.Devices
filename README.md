@@ -48,7 +48,7 @@ This Homey app provides support for various Zigbee devices that are not natively
 ## Author
 
 **Naresh Kodali**
-Email: kodalis.sri@gmail.com
+
 
 ## License
 
