@@ -1,0 +1,37 @@
+name: Validate Homey App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Homey CLI
+      run: npm install -g homey
+
+    - name: Build app
+      run: homey app build
+
+    - name: Validate app
+      run: homey app validate
+
+    - name: Check version consistency
+      run: |
+        VERSION=$(node -p "require('./app.json').version")
+        echo "App version: $VERSION"
