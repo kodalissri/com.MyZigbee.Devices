@@ -11,6 +11,10 @@ on:
           - patch
           - minor
           - major
+      changelog:
+        description: 'Changelog entry (English)'
+        required: true
+        type: string
 
 jobs:
   bump-version:
@@ -46,9 +50,32 @@ jobs:
         VERSION_TYPE="${{ github.event.inputs.version_type }}"
         homey app version $VERSION_TYPE
 
+    - name: Update changelog
+      env:
+        CHANGELOG_ENTRY: ${{ github.event.inputs.changelog }}
+      run: |
+        NEW_VERSION=$(node -p "require('./app.json').version")
+        export NEW_VERSION
+
+        # Read existing changelog, add new entry, and write back
+        node -e "
+          const fs = require('fs');
+          const changelog = JSON.parse(fs.readFileSync('.homeychangelog.json', 'utf8'));
+          const newVersion = process.env.NEW_VERSION;
+          const newEntry = process.env.CHANGELOG_ENTRY;
+
+          // Create new changelog object with new version first
+          const updatedChangelog = {
+            [newVersion]: { en: newEntry },
+            ...changelog
+          };
+
+          fs.writeFileSync('.homeychangelog.json', JSON.stringify(updatedChangelog, null, 2) + '\n');
+        "
+
     - name: Commit version bump
       run: |
-        git add .homeycompose/app.json app.json
+        git add .homeycompose/app.json app.json .homeychangelog.json
         NEW_VERSION=$(node -p "require('./app.json').version")
         git commit -m "Bump version to $NEW_VERSION"
         git push
