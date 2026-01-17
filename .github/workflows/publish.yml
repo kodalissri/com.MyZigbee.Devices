@@ -31,8 +31,7 @@ jobs:
 
     - name: Publish to Homey App Store
       env:
-        HOMEY_TOKEN: ${{ secrets.HOMEY_TOKEN }}
+        HOMEY_BEARER_TOKEN: ${{ secrets.HOMEY_TOKEN }}
       run: |
         echo "Publishing app to Homey App Store..."
-        homey login --token $HOMEY_TOKEN
         homey app publish
