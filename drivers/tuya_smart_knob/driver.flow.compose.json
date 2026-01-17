@@ -1,0 +1,110 @@
+{
+  "triggers": [
+    {
+      "id": "rotate_left",
+      "title": {
+        "en": "Rotated left",
+        "nl": "Naar links gedraaid"
+      },
+      "hint": {
+        "en": "Triggered when the knob is rotated counterclockwise",
+        "nl": "Geactiveerd wanneer de knop tegen de klok in wordt gedraaid"
+      },
+      "tokens": [
+        {
+          "name": "step_size",
+          "type": "number",
+          "title": {
+            "en": "Step Size",
+            "nl": "Stapgrootte"
+          },
+          "example": 30
+        },
+        {
+          "name": "transition_time",
+          "type": "number",
+          "title": {
+            "en": "Transition Time",
+            "nl": "Overgangstijd"
+          },
+          "example": 0.5
+        }
+      ]
+    },
+    {
+      "id": "rotate_right",
+      "title": {
+        "en": "Rotated right",
+        "nl": "Naar rechts gedraaid"
+      },
+      "hint": {
+        "en": "Triggered when the knob is rotated clockwise",
+        "nl": "Geactiveerd wanneer de knop met de klok mee wordt gedraaid"
+      },
+      "tokens": [
+        {
+          "name": "step_size",
+          "type": "number",
+          "title": {
+            "en": "Step Size",
+            "nl": "Stapgrootte"
+          },
+          "example": 30
+        },
+        {
+          "name": "transition_time",
+          "type": "number",
+          "title": {
+            "en": "Transition Time",
+            "nl": "Overgangstijd"
+          },
+          "example": 0.5
+        }
+      ]
+    },
+    {
+      "id": "single_press",
+      "title": {
+        "en": "Single press",
+        "nl": "Enkele druk"
+      },
+      "hint": {
+        "en": "Triggered when the knob is pressed once",
+        "nl": "Geactiveerd wanneer de knop ��n keer wordt ingedrukt"
+      }
+    },
+    {
+      "id": "double_press",
+      "title": {
+        "en": "Double press",
+        "nl": "Dubbele druk"
+      },
+      "hint": {
+        "en": "Triggered when the knob is pressed twice quickly",
+        "nl": "Geactiveerd wanneer de knop twee keer snel wordt ingedrukt"
+      }
+    },
+    {
+      "id": "long_press",
+      "title": {
+        "en": "Long press",
+        "nl": "Lange druk"
+      },
+      "hint": {
+        "en": "Triggered when the knob is held down",
+        "nl": "Geactiveerd wanneer de knop wordt ingedrukt gehouden"
+      }
+    },
+    {
+      "id": "toggle_action",
+      "title": {
+        "en": "Toggle action",
+        "nl": "Schakelactie"
+      },
+      "hint": {
+        "en": "Triggered when a toggle command is received",
+        "nl": "Geactiveerd wanneer een schakelcommando wordt ontvangen"
+      }
+    }
+  ]
+}

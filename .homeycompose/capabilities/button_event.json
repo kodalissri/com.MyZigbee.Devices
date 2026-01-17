@@ -1,0 +1,33 @@
+{
+  "type": "enum",
+  "title": { "en": "Last Action" },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "values": [
+    {
+      "id": "none",
+      "title": { "en": "None" }
+    },
+    {
+      "id": "single",
+      "title": { "en": "Single Press" }
+    },
+    {
+      "id": "double",
+      "title": { "en": "Double Press" }
+    },
+    {
+      "id": "hold",
+      "title": { "en": "Long Press" }
+    },
+    {
+      "id": "rotate_left",
+      "title": { "en": "Turned Left" }
+    },
+    {
+      "id": "rotate_right",
+      "title": { "en": "Turned Right" }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+	"type": "enum",
+	"title": {
+		"en": "Operating Mode"
+	},
+	"getable": true,
+	"setable": true,
+	"uiComponent": "picker",
+	"values": [
+		{
+			"id": "command",
+			"title": {
+				"en": "Command Mode"
+			},
+			"label": {
+				"en": "Command (Direct Control)"
+			}
+		},
+		{
+			"id": "event",
+			"title": {
+				"en": "Event Mode"
+			},
+			"label": {
+				"en": "Event (Flow Triggers)"
+			}
+		}
+	],
+	"uiComponentAttributes": {
+		"placeholder": {
+			"en": "Select a mode..."
+		}
+	}
+}

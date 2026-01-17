@@ -1,0 +1,43 @@
+[
+  {
+    "id": "radar_sensitivity",
+    "type": "number",
+    "label": {
+      "en": "Radar sensitivity",
+      "nl": "Radar sensitiviteit"
+    },
+    "value": 7,
+    "min": 0,
+    "max": 19
+  },
+  {
+    "id": "fading_time",
+    "type": "number",
+    "label": {
+      "en": "Fading time",
+      "nl": "Reset tijd"
+    },
+    "value": 40,
+    "min": 0,
+    "max": 28800,
+    "units": {
+      "en": "seconds",
+      "nl": "seconden"
+    }
+  },
+  {
+    "id": "illuminance_update_interval",
+    "type": "number",
+    "label": {
+      "en": "Illuminance update interval",
+      "nl": "Afstand update interval"
+    },
+    "value": 2,
+    "min": 1,
+    "max": 720,
+    "units": {
+      "en": "Minutes",
+      "nl": "Minutes"
+    }
+  }
+]

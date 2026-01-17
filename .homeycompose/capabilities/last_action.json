@@ -1,0 +1,19 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Last Action",
+    "nl": "Laatste Actie"
+  },
+  "desc": {
+    "en": "The last button action performed",
+    "nl": "De laatste knopactie uitgevoerd"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/last_action.svg",
+  "iconObj": {
+    "id": "last_action",
+    "url": "/assets/last_action.svg"
+  }
+}

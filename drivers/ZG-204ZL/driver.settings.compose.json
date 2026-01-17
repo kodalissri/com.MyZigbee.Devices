@@ -1,0 +1,77 @@
+[
+  {
+    "id": "invert_motion",
+    "type": "checkbox",
+    "label": { "en": "Invert Motion" },
+    "hint": { "en": "Toggle this if the sensor reports 'Motion' when it is actually quiet." },
+    "value": false
+  },
+  {
+    "id": "sensitivity",
+    "type": "dropdown",
+    "label": { "en": "Sensitivity" },
+    "value": "1",
+    "values": [
+      {
+        "id": "0",
+        "label": { "en": "Low" }
+      },
+      {
+        "id": "1",
+        "label": { "en": "Medium" }
+      },
+      {
+        "id": "2",
+        "label": { "en": "High" }
+      }
+    ]
+  },
+  {
+    "id": "keep_time",
+    "type": "dropdown",
+    "label": { "en": "Keep Time (Blind time)" },
+    "value": "1",
+    "values": [
+      {
+        "id": "0",
+        "label": { "en": "10 Seconds" }
+      },
+      {
+        "id": "1",
+        "label": { "en": "30 Seconds" }
+      },
+      {
+        "id": "2",
+        "label": { "en": "60 Seconds" }
+      },
+      {
+        "id": "3",
+        "label": { "en": "120 Seconds" }
+      }
+    ]
+  },
+  {
+    "id": "illuminance_interval",
+    "type": "number",
+    "label": { "en": "Illumination Interval (Minutes)" },
+    "hint": { "en": "How often the sensor reports light levels (1-720 minutes). Note: Trigger motion to apply." },
+    "value": 5,
+    "attr": {
+      "min": 1,
+      "max": 720,
+      "step": 1
+    }
+  },
+  {
+    "id": "illuminance_config",
+    "type": "number",
+    "label": { "en": "Illuminance Sensitivity" },
+    "hint": { "en": "Threshold for light level change reporting (usually 1-50)." },
+    "value": 10,
+    "attr": {
+      "min": 1,
+      "max": 100,
+      "step": 1
+    }
+  }
+]

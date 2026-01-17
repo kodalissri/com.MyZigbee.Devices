@@ -1,0 +1,72 @@
+[
+  {
+    "id": "radar_sensitivity",
+    "type": "number",
+    "label": {
+      "en": "Radar sensitivity",
+      "nl": "Radar sensitiviteit"
+    },
+    "value": 7,
+    "min": 0,
+    "max": 10
+  },
+  {
+    "id": "PIR_sensitivity",
+    "type": "number",
+    "label": {
+      "en": "PIR sensitivity",
+      "nl": "PIR sensitiviteit"
+    },
+    "value": 7,
+    "min": 0,
+    "max": 10
+  },
+  {
+    "id": "radar_distance_detection",
+    "type": "number",
+    "label": {
+      "en": "Radar detection Distance in Meters (.01m steps)",
+      "nl": "Radar detection Distance in Meters (.01m steps)"
+    },
+    "value": 7,
+    "min": 0,
+    "max": 10
+  },
+  {
+    "id": "motion_detection_mode",
+    "type": "dropdown",
+    "label": {
+      "en": "Motion detection Mode",
+      "nl": "Motion detection Mode"
+    },
+    "values": [
+      {
+        "id": "0",
+        "label": { "en": "PIR Only" }
+      },
+      {
+        "id": "1",
+        "label": { "en": "PIR and Radar" }
+      },
+      { 
+        "id": "2",
+        "label": { "en": "Radar only" }
+      }
+    ]
+  },
+  {
+    "id": "fading_time",
+    "type": "number",
+    "label": {
+      "en": "Fading time",
+      "nl": "Reset tijd"
+    },
+    "value": 40,
+    "min": 0,
+    "max": 28800,
+    "units": {
+      "en": "seconds",
+      "nl": "seconden"
+    }
+  }
+]

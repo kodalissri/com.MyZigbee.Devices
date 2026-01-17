@@ -1,0 +1,38 @@
+{
+
+  "type": "enum",
+  "title": {
+    "en": "Motion State"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "values": [
+    {
+      "id": "0",
+      "title": {
+        "en": "None"
+      }
+    },
+    {
+      "id": "1",
+      "title": {
+        "en": "Large"
+      }
+    },
+    {
+      "id": "2",
+      "title": {
+        "en": "Small"
+      }
+    },
+    {
+      "id": "3",
+      "title": {
+        "en": "Static"
+      }
+    }
+  ],
+  "icon": "/drivers/ZG-204ZM/assets/movement.svg"
+
+}
