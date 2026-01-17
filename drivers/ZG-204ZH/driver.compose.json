@@ -16,8 +16,8 @@
 
   ],
   "images": {
-    "large": "{{driverAssetsPath}}/assets/images/large.png",
-    "small": "{{driverAssetsPath}}/assets/images/small.png"
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "small": "{{driverAssetsPath}}/images/small.png"
   },
   "energy": {
     "batteries": [
