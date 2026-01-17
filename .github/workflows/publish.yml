@@ -30,8 +30,6 @@ jobs:
       run: homey app validate --level publish
 
     - name: Publish to Homey App Store
-      env:
-        HOMEY_BEARER_TOKEN: ${{ secrets.HOMEY_TOKEN }}
-      run: |
-        echo "Publishing app to Homey App Store..."
-        homey app publish --changelog "Release ${{ github.event.release.tag_name }}"
+      uses: athombv/github-action-homey-app-publish@master
+      with:
+        personal_access_token: ${{ secrets.HOMEY_TOKEN }}
