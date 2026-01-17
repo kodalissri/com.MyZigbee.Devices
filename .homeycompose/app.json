@@ -16,6 +16,7 @@
     "security"
   ],
   "permissions": [],
+  "brandColor": "#4A90E2",
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",

@@ -24,8 +24,8 @@
     "batteries": [ "CR2032" ]
   },
   "images": {
-    "large": "/drivers/tuya-smart-knob/assets/images/large.png",
-    "small": "/drivers/tuya-smart-knob/assets/images/small.png"
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "small": "{{driverAssetsPath}}/images/small.png"
   },
   "zigbee": {
     "manufacturerName": [
@@ -62,7 +62,7 @@
       }
     },
     "learnmode": {
-      "image": "/drivers/tuya-smart-knob/assets/learn.svg",
+      "image": "{{driverAssetsPath}}/learn.svg",
       "instruction": {
         "en": "Press and hold the button for 5 seconds until the LED blinks rapidly",
         "nl": "Houd de knop 5 seconden ingedrukt totdat de LED snel knippert"

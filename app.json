@@ -17,6 +17,7 @@
     "security"
   ],
   "permissions": [],
+  "brandColor": "#4A90E2",
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
@@ -849,8 +850,8 @@
         ]
       },
       "images": {
-        "large": "/drivers/tuya-smart-knob/assets/images/large.png",
-        "small": "/drivers/tuya-smart-knob/assets/images/small.png"
+        "large": "/drivers/tuya_smart_knob/assets/images/large.png",
+        "small": "/drivers/tuya_smart_knob/assets/images/small.png"
       },
       "zigbee": {
         "manufacturerName": [
@@ -887,7 +888,7 @@
           }
         },
         "learnmode": {
-          "image": "/drivers/tuya-smart-knob/assets/learn.svg",
+          "image": "/drivers/tuya_smart_knob/assets/learn.svg",
           "instruction": {
             "en": "Press and hold the button for 5 seconds until the LED blinks rapidly",
             "nl": "Houd de knop 5 seconden ingedrukt totdat de LED snel knippert"
