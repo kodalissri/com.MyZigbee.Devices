@@ -1,4 +1,7 @@
 {
+  "1.1.12": {
+    "en": "Added Philips Hue Dimmer Remote"
+  },
   "1.1.11": {
     "en": "New Homey App"
   },
