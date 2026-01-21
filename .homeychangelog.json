@@ -1,4 +1,7 @@
 {
+  "1.1.14": {
+    "en": "Added text field to button names in settings"
+  },
   "1.1.13": {
     "en": "Added Virtual Butoons"
   },
