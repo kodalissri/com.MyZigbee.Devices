@@ -1435,6 +1435,67 @@
                 "max": 10,
                 "step": 1
               }
+            },
+            {
+              "id": "device_icon",
+              "type": "dropdown",
+              "label": {
+                "en": "Device Icon (Preference Only)"
+              },
+              "hint": {
+                "en": "Icon preference saved for future use. Note: Dynamic icon changes are not supported in Homey SDK v3."
+              },
+              "value": "default",
+              "values": [
+                {
+                  "id": "default",
+                  "label": {
+                    "en": "Default Button"
+                  }
+                },
+                {
+                  "id": "power",
+                  "label": {
+                    "en": "Power Button"
+                  }
+                },
+                {
+                  "id": "light",
+                  "label": {
+                    "en": "Light Switch"
+                  }
+                },
+                {
+                  "id": "play",
+                  "label": {
+                    "en": "Play Button"
+                  }
+                },
+                {
+                  "id": "star",
+                  "label": {
+                    "en": "Star"
+                  }
+                },
+                {
+                  "id": "heart",
+                  "label": {
+                    "en": "Heart"
+                  }
+                },
+                {
+                  "id": "bell",
+                  "label": {
+                    "en": "Bell"
+                  }
+                },
+                {
+                  "id": "home",
+                  "label": {
+                    "en": "Home"
+                  }
+                }
+              ]
             }
           ]
         }

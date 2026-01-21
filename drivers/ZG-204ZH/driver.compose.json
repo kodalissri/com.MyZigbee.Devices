@@ -1,7 +1,7 @@
 {
   "id": "PIR_radar_sensor_multi_1",
   "name": {
-    "en": "PIR Radar Luminance (24G)"
+    "en": "PIR Multi Sensor temp & Humidity (24G)"
   },
   "class": "sensor",
   "platforms": [ "local" ],
