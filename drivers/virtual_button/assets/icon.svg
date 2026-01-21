@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <rect x="100" y="100" width="300" height="300" rx="30" ry="30" fill="#4CAF50" stroke="#2E7D32" stroke-width="8"/>
+  <circle cx="250" cy="250" r="80" fill="#66BB6A"/>
+  <text x="250" y="420" font-family="Arial, sans-serif" font-size="48" fill="#2E7D32" text-anchor="middle" font-weight="bold">BUTTON</text>
+</svg>

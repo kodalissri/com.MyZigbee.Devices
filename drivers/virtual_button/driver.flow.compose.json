@@ -1,0 +1,160 @@
+{
+  "triggers": [
+    {
+      "id": "virtual_button_pressed",
+      "title": {
+        "en": "Button pressed"
+      },
+      "titleFormatted": {
+        "en": "Button [[button_number]] pressed"
+      },
+      "args": [
+        {
+          "name": "button_number",
+          "type": "dropdown",
+          "values": [
+            {
+              "id": "1",
+              "label": {
+                "en": "Button 1"
+              }
+            },
+            {
+              "id": "2",
+              "label": {
+                "en": "Button 2"
+              }
+            },
+            {
+              "id": "3",
+              "label": {
+                "en": "Button 3"
+              }
+            },
+            {
+              "id": "4",
+              "label": {
+                "en": "Button 4"
+              }
+            },
+            {
+              "id": "5",
+              "label": {
+                "en": "Button 5"
+              }
+            },
+            {
+              "id": "6",
+              "label": {
+                "en": "Button 6"
+              }
+            },
+            {
+              "id": "7",
+              "label": {
+                "en": "Button 7"
+              }
+            },
+            {
+              "id": "8",
+              "label": {
+                "en": "Button 8"
+              }
+            },
+            {
+              "id": "9",
+              "label": {
+                "en": "Button 9"
+              }
+            },
+            {
+              "id": "10",
+              "label": {
+                "en": "Button 10"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "press_button",
+      "title": {
+        "en": "Press a button"
+      },
+      "titleFormatted": {
+        "en": "Press button [[button_number]]"
+      },
+      "args": [
+        {
+          "name": "button_number",
+          "type": "dropdown",
+          "values": [
+            {
+              "id": "1",
+              "label": {
+                "en": "Button 1"
+              }
+            },
+            {
+              "id": "2",
+              "label": {
+                "en": "Button 2"
+              }
+            },
+            {
+              "id": "3",
+              "label": {
+                "en": "Button 3"
+              }
+            },
+            {
+              "id": "4",
+              "label": {
+                "en": "Button 4"
+              }
+            },
+            {
+              "id": "5",
+              "label": {
+                "en": "Button 5"
+              }
+            },
+            {
+              "id": "6",
+              "label": {
+                "en": "Button 6"
+              }
+            },
+            {
+              "id": "7",
+              "label": {
+                "en": "Button 7"
+              }
+            },
+            {
+              "id": "8",
+              "label": {
+                "en": "Button 8"
+              }
+            },
+            {
+              "id": "9",
+              "label": {
+                "en": "Button 9"
+              }
+            },
+            {
+              "id": "10",
+              "label": {
+                "en": "Button 10"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

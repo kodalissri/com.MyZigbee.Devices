@@ -262,6 +262,172 @@
             "filter": "driver_id=tuya_smart_knob"
           }
         ]
+      },
+      {
+        "id": "virtual_button_pressed",
+        "title": {
+          "en": "Button pressed"
+        },
+        "titleFormatted": {
+          "en": "Button [[button_number]] pressed"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=virtual_button"
+          },
+          {
+            "name": "button_number",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Button 1"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Button 2"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Button 3"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Button 4"
+                }
+              },
+              {
+                "id": "5",
+                "label": {
+                  "en": "Button 5"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "Button 6"
+                }
+              },
+              {
+                "id": "7",
+                "label": {
+                  "en": "Button 7"
+                }
+              },
+              {
+                "id": "8",
+                "label": {
+                  "en": "Button 8"
+                }
+              },
+              {
+                "id": "9",
+                "label": {
+                  "en": "Button 9"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "Button 10"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "press_button",
+        "title": {
+          "en": "Press a button"
+        },
+        "titleFormatted": {
+          "en": "Press button [[button_number]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=virtual_button"
+          },
+          {
+            "name": "button_number",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Button 1"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Button 2"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Button 3"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Button 4"
+                }
+              },
+              {
+                "id": "5",
+                "label": {
+                  "en": "Button 5"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "Button 6"
+                }
+              },
+              {
+                "id": "7",
+                "label": {
+                  "en": "Button 7"
+                }
+              },
+              {
+                "id": "8",
+                "label": {
+                  "en": "Button 8"
+                }
+              },
+              {
+                "id": "9",
+                "label": {
+                  "en": "Button 9"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "Button 10"
+                }
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1218,6 +1384,61 @@
         }
       ],
       "id": "tuya_smart_knob"
+    },
+    {
+      "name": {
+        "en": "Virtual Button Device"
+      },
+      "class": "button",
+      "capabilities": [
+        "button"
+      ],
+      "virtual": true,
+      "icon": "/drivers/virtual_button/assets/icon.svg",
+      "images": {
+        "large": "/drivers/virtual_button/assets/images/large.png",
+        "small": "/drivers/virtual_button/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "virtual_button",
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Button Configuration"
+          },
+          "children": [
+            {
+              "id": "number_of_buttons",
+              "type": "number",
+              "label": {
+                "en": "Number of Buttons"
+              },
+              "hint": {
+                "en": "Configure how many buttons this device should have (1-10)"
+              },
+              "value": 1,
+              "attr": {
+                "min": 1,
+                "max": 10,
+                "step": 1
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "capabilities": {

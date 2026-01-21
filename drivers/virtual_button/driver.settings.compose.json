@@ -1,0 +1,26 @@
+[
+  {
+    "type": "group",
+    "label": {
+      "en": "Button Configuration"
+    },
+    "children": [
+      {
+        "id": "number_of_buttons",
+        "type": "number",
+        "label": {
+          "en": "Number of Buttons"
+        },
+        "hint": {
+          "en": "Configure how many buttons this device should have (1-10)"
+        },
+        "value": 1,
+        "attr": {
+          "min": 1,
+          "max": 10,
+          "step": 1
+        }
+      }
+    ]
+  }
+]
