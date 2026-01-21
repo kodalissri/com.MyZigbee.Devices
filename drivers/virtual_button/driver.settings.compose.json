@@ -22,5 +22,123 @@
         }
       }
     ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Button Names"
+    },
+    "children": [
+      {
+        "id": "button_1_name",
+        "type": "text",
+        "label": {
+          "en": "Button 1 Name"
+        },
+        "hint": {
+          "en": "Custom name for button 1 (leave empty for default)"
+        },
+        "value": ""
+      },
+      {
+        "id": "button_2_name",
+        "type": "text",
+        "label": {
+          "en": "Button 2 Name"
+        },
+        "hint": {
+          "en": "Custom name for button 2 (leave empty for default)"
+        },
+        "value": ""
+      },
+      {
+        "id": "button_3_name",
+        "type": "text",
+        "label": {
+          "en": "Button 3 Name"
+        },
+        "hint": {
+          "en": "Custom name for button 3 (leave empty for default)"
+        },
+        "value": ""
+      },
+      {
+        "id": "button_4_name",
+        "type": "text",
+        "label": {
+          "en": "Button 4 Name"
+        },
+        "hint": {
+          "en": "Custom name for button 4 (leave empty for default)"
+        },
+        "value": ""
+      },
+      {
+        "id": "button_5_name",
+        "type": "text",
+        "label": {
+          "en": "Button 5 Name"
+        },
+        "hint": {
+          "en": "Custom name for button 5 (leave empty for default)"
+        },
+        "value": ""
+      },
+      {
+        "id": "button_6_name",
+        "type": "text",
+        "label": {
+          "en": "Button 6 Name"
+        },
+        "hint": {
+          "en": "Custom name for button 6 (leave empty for default)"
+        },
+        "value": ""
+      },
+      {
+        "id": "button_7_name",
+        "type": "text",
+        "label": {
+          "en": "Button 7 Name"
+        },
+        "hint": {
+          "en": "Custom name for button 7 (leave empty for default)"
+        },
+        "value": ""
+      },
+      {
+        "id": "button_8_name",
+        "type": "text",
+        "label": {
+          "en": "Button 8 Name"
+        },
+        "hint": {
+          "en": "Custom name for button 8 (leave empty for default)"
+        },
+        "value": ""
+      },
+      {
+        "id": "button_9_name",
+        "type": "text",
+        "label": {
+          "en": "Button 9 Name"
+        },
+        "hint": {
+          "en": "Custom name for button 9 (leave empty for default)"
+        },
+        "value": ""
+      },
+      {
+        "id": "button_10_name",
+        "type": "text",
+        "label": {
+          "en": "Button 10 Name"
+        },
+        "hint": {
+          "en": "Custom name for button 10 (leave empty for default)"
+        },
+        "value": ""
+      }
+    ]
   }
 ]

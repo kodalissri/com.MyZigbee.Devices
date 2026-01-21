@@ -13,12 +13,12 @@ class VirtualButtonDevice extends Device {
     this.log('Virtual Button Device initialization complete');
   }
 
-  async initializeButtons(numberOfButtons = null) {
+  async initializeButtons(numberOfButtons = null, forceRefresh = false) {
     // Allow passing numberOfButtons directly, otherwise get from settings
     if (numberOfButtons === null) {
       numberOfButtons = this.getSetting('number_of_buttons') || 1;
     }
-    this.log(`Initializing ${numberOfButtons} button(s)`);
+    this.log(`Initializing ${numberOfButtons} button(s), forceRefresh: ${forceRefresh}`);
 
     // First, remove any buttons beyond the configured number
     for (let i = 10; i >= 1; i--) {
@@ -34,31 +34,43 @@ class VirtualButtonDevice extends Device {
     for (let i = 1; i <= numberOfButtons; i++) {
       const capabilityId = i === 1 ? 'button' : `button.${i}`;
 
-      // Add button if it doesn't exist
-      if (!this.hasCapability(capabilityId)) {
+      // Get custom name from settings, or use default
+      const customName = this.getSetting(`button_${i}_name`);
+      const buttonTitle = customName && customName.trim() !== '' ? customName : `Button ${i}`;
+
+      // If forceRefresh is true, remove and re-add the capability to force UI update
+      if (forceRefresh && this.hasCapability(capabilityId)) {
+        this.log(`Force refreshing capability: ${capabilityId}`);
+        await this.removeCapability(capabilityId);
+        await this.addCapability(capabilityId);
+        this.log(`Re-added capability: ${capabilityId}`);
+      } else if (!this.hasCapability(capabilityId)) {
+        // Add button if it doesn't exist
         await this.addCapability(capabilityId);
         this.log(`Added capability: ${capabilityId}`);
       }
 
       // Set capability options for display name
+      this.log(`Setting title for ${capabilityId} to: "${buttonTitle}"`);
       await this.setCapabilityOptions(capabilityId, {
         title: {
-          en: `Button ${i}`
+          en: buttonTitle
         }
       }).catch(err => this.log(`Could not set capability options for ${capabilityId}:`, err));
 
-      // Only register capability listener if not already registered
-      if (!this.hasCapabilityListener(capabilityId)) {
+      // Verify the title was set
+      const options = this.getCapabilityOptions(capabilityId);
+      this.log(`Verified title for ${capabilityId}:`, options.title);
+
+      // Register capability listener - wrapping in try-catch to suppress warnings
+      try {
         this.registerCapabilityListener(capabilityId, async () => {
           await this.pressButton(i.toString());
         });
+      } catch (err) {
+        // Listener already registered, this is fine
       }
     }
-  }
-
-  hasCapabilityListener(capabilityId) {
-    // Check if listener is already registered by checking if _capabilityInstances exists
-    return this._capabilityInstances && this._capabilityInstances[capabilityId] && this._capabilityInstances[capabilityId]._listenerRegistered;
   }
 
   async pressButton(buttonNumber) {
@@ -89,6 +101,45 @@ class VirtualButtonDevice extends Device {
     if (changedKeys.includes('number_of_buttons')) {
       this.log(`Number of buttons changed from ${oldSettings.number_of_buttons} to ${newSettings.number_of_buttons}`);
       await this.initializeButtons(newSettings.number_of_buttons);
+    }
+
+    // If any button name changed, update only the affected buttons
+    const buttonNameChanges = changedKeys.filter(key => key.startsWith('button_') && key.endsWith('_name'));
+    if (buttonNameChanges.length > 0) {
+      this.log('Button name(s) changed:', buttonNameChanges);
+
+      for (const key of buttonNameChanges) {
+        // Extract button number from key like "button_3_name"
+        const buttonNum = parseInt(key.match(/button_(\d+)_name/)[1]);
+        const capabilityId = buttonNum === 1 ? 'button' : `button.${buttonNum}`;
+        const customName = newSettings[key];
+        const buttonTitle = customName && customName.trim() !== '' ? customName : `Button ${buttonNum}`;
+
+        this.log(`Updating ${capabilityId} title to: "${buttonTitle}"`);
+
+        if (this.hasCapability(capabilityId)) {
+          // Remove and re-add to force UI refresh
+          await this.removeCapability(capabilityId);
+          await this.addCapability(capabilityId);
+
+          await this.setCapabilityOptions(capabilityId, {
+            title: {
+              en: buttonTitle
+            }
+          });
+
+          // Re-register listener
+          try {
+            this.registerCapabilityListener(capabilityId, async () => {
+              await this.pressButton(buttonNum.toString());
+            });
+          } catch (err) {
+            // Listener already registered
+          }
+
+          this.log(`Updated ${capabilityId} successfully`);
+        }
+      }
     }
   }
 
