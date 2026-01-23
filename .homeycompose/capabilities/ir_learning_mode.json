@@ -1,0 +1,12 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Learning Mode"
+  },
+  "desc": {
+    "en": "Enable IR code learning mode"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "toggle"
+}

@@ -1,0 +1,84 @@
+{
+  "triggers": [
+    {
+      "id": "ir_code_learned",
+      "title": {
+        "en": "IR code learned"
+      },
+      "titleFormatted": {
+        "en": "IR code learned in slot [[slot_name]]"
+      },
+      "hint": {
+        "en": "Triggered when an IR code has been successfully learned from a remote control."
+      },
+      "tokens": [
+        {
+          "name": "slot_number",
+          "type": "string",
+          "title": {
+            "en": "Slot Number"
+          },
+          "example": "1"
+        },
+        {
+          "name": "slot_name",
+          "type": "string",
+          "title": {
+            "en": "Slot Name"
+          },
+          "example": "TV Power"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "learn_ir_code",
+      "title": {
+        "en": "Learn IR code"
+      },
+      "titleFormatted": {
+        "en": "Learn IR code for [[slot_number]]"
+      },
+      "hint": {
+        "en": "Start learning mode. Point your remote at the IR blaster and press the button you want to learn."
+      },
+      "args": [
+        {
+          "name": "slot_number",
+          "type": "autocomplete",
+          "title": {
+            "en": "IR Code Slot"
+          },
+          "placeholder": {
+            "en": "Select or search slot"
+          }
+        }
+      ]
+    },
+    {
+      "id": "blast_ir_code",
+      "title": {
+        "en": "Blast IR code"
+      },
+      "titleFormatted": {
+        "en": "Blast IR code [[slot_number]]"
+      },
+      "hint": {
+        "en": "Send the learned IR code to control your device."
+      },
+      "args": [
+        {
+          "name": "slot_number",
+          "type": "autocomplete",
+          "title": {
+            "en": "IR Code Slot"
+          },
+          "placeholder": {
+            "en": "Select or search slot"
+          }
+        }
+      ]
+    }
+  ]
+}

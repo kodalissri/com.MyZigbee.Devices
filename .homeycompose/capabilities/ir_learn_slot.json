@@ -1,0 +1,74 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "IR Slot"
+  },
+  "desc": {
+    "en": "Select slot for learning and testing IR codes"
+  },
+  "values": [
+    {
+      "id": "1",
+      "title": {
+        "en": "Slot 1"
+      }
+    },
+    {
+      "id": "2",
+      "title": {
+        "en": "Slot 2"
+      }
+    },
+    {
+      "id": "3",
+      "title": {
+        "en": "Slot 3"
+      }
+    },
+    {
+      "id": "4",
+      "title": {
+        "en": "Slot 4"
+      }
+    },
+    {
+      "id": "5",
+      "title": {
+        "en": "Slot 5"
+      }
+    },
+    {
+      "id": "6",
+      "title": {
+        "en": "Slot 6"
+      }
+    },
+    {
+      "id": "7",
+      "title": {
+        "en": "Slot 7"
+      }
+    },
+    {
+      "id": "8",
+      "title": {
+        "en": "Slot 8"
+      }
+    },
+    {
+      "id": "9",
+      "title": {
+        "en": "Slot 9"
+      }
+    },
+    {
+      "id": "10",
+      "title": {
+        "en": "Slot 10"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker"
+}

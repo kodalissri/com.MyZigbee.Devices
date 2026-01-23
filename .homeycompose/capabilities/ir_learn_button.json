@@ -1,0 +1,12 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Learn IR Code"
+  },
+  "desc": {
+    "en": "Press to start learning mode. Point your remote and press a button."
+  },
+  "getable": false,
+  "setable": true,
+  "uiComponent": "button"
+}

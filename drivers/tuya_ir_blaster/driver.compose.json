@@ -1,0 +1,72 @@
+{
+  "id": "tuya_ir_blaster",
+  "name": {
+    "en": "Tuya IR Blaster (ZS06)"
+  },
+  "class": "other",
+  "capabilities": [
+    "ir_learn_slot",
+    "ir_learn_button",
+    "ir_test_button"
+  ],
+  "capabilitiesOptions": {
+    "ir_learn_slot": {
+      "title": {
+        "en": "IR Slot"
+      }
+    },
+    "ir_learn_button": {
+      "title": {
+        "en": "Learn IR Code"
+      }
+    },
+    "ir_test_button": {
+      "title": {
+        "en": "Transmit"
+      }
+    }
+  },
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "zigbee"
+  ],
+  "zigbee": {
+    "manufacturerName": [
+      "_TZ3290_7v1k4vufotpowp9z",
+      "_TZ3290_rlkmy85q4pzoxobl",
+      "_TZ3290_jxvzqatwgsaqzx1u",
+      "_TZ3290_lypnqvlem5eq1ree",
+      "_TZ3290_uc8lwbi2",
+      "_TZ3290_nba3knpsarkawgnt",
+      "_TZ3290_8xzb2ghn",
+      "_TZ3290_s6ezpa3j"
+    ],
+    "productId": [
+      "TS1201"
+    ],
+    "endpoints": {
+      "1": {
+        "clusters": [
+          0,
+          4,
+          5,
+          60672,
+          60673
+        ],
+        "bindings": []
+      }
+    },
+    "learnmode": {
+      "image": "{{driverAssetsPath}}/icon.svg",
+      "instruction": {
+        "en": "Press and hold the reset button on the IR Blaster for 5 seconds until the LED starts flashing rapidly. The device will then appear in the device list."
+      }
+    }
+  },
+  "images": {
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "small": "{{driverAssetsPath}}/images/small.png"
+  }
+}
