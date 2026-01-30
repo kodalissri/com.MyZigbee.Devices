@@ -1375,6 +1375,98 @@
       ]
     },
     {
+      "id": "osram_lightify_rgbw",
+      "name": {
+        "en": "OSRAM Lightify Flex RGBW",
+        "nl": "OSRAM Lightify Flex RGBW",
+        "de": "OSRAM Lightify Flex RGBW"
+      },
+      "class": "light",
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "capabilities": [
+        "onoff",
+        "dim",
+        "light_hue",
+        "light_saturation",
+        "light_temperature",
+        "light_mode"
+      ],
+      "capabilitiesOptions": {
+        "dim": {
+          "opts": {
+            "duration": true
+          }
+        },
+        "light_hue": {
+          "opts": {
+            "duration": true
+          }
+        },
+        "light_saturation": {
+          "opts": {
+            "duration": true
+          }
+        },
+        "light_temperature": {
+          "opts": {
+            "duration": true
+          }
+        }
+      },
+      "images": {
+        "large": "/drivers/osram_lightify_rgbw/assets/images/large.png",
+        "small": "/drivers/osram_lightify_rgbw/assets/images/small.png"
+      },
+      "energy": {
+        "approximation": {
+          "usageOn": 20,
+          "usageOff": 0.5
+        }
+      },
+      "zigbee": {
+        "manufacturerName": [
+          "OSRAM"
+        ],
+        "productId": [
+          "LIGHTIFY Flex RGBW",
+          "Flex RGBW",
+          "LIGHTIFY Indoor Flex RGBW",
+          "Flex Outdoor RGBW"
+        ],
+        "endpoints": {
+          "3": {
+            "clusters": [
+              0,
+              3,
+              4,
+              5,
+              6,
+              8,
+              768
+            ],
+            "bindings": [
+              6,
+              8,
+              768
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/osram_lightify_rgbw/assets/learn.svg",
+          "instruction": {
+            "en": "Toggle the light strip on and off 5 times quickly (within 2 seconds each). The light will flash to indicate it's in pairing mode.",
+            "nl": "Schakel de lichtstrip 5 keer snel aan en uit (binnen 2 seconden elk). Het licht knippert om aan te geven dat het in koppelmodus staat.",
+            "de": "Schalten Sie den Lichtstreifen 5 mal schnell ein und aus (jeweils innerhalb von 2 Sekunden). Das Licht blinkt, um anzuzeigen, dass es sich im Kopplungsmodus befindet."
+          }
+        }
+      }
+    },
+    {
       "id": "tuya_ir_blaster",
       "name": {
         "en": "Tuya IR Blaster (ZS06)"
