@@ -1,4 +1,7 @@
 {
+  "1.1.16": {
+    "en": "Added Osram Lightify Light strip"
+  },
   "1.1.15": {
     "en": "added tuya IR blaser(ZS06) support"
   },
