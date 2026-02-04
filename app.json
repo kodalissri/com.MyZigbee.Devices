@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.MyZigbee.Devices",
-  "version": "1.1.16",
+  "version": "1.1.17",
   "compatibility": ">=12.4.0",
   "sdk": 3,
   "platforms": [
@@ -790,6 +790,130 @@
               "id": "2",
               "label": {
                 "en": "Report humidity value with 2 decimals (35.19 %)"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ZG-102ZM",
+      "name": {
+        "en": "Vibration Contact Sensor"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "alarm_vibration",
+        "alarm_contact",
+        "measure_battery",
+        "alarm_battery"
+      ],
+      "images": {
+        "large": "/drivers/ZG-102ZM/assets/images/large.png",
+        "small": "/drivers/ZG-102ZM/assets/images/small.png"
+      },
+      "energy": {
+        "batteries": [
+          "CR2032"
+        ]
+      },
+      "zigbee": {
+        "manufacturerName": [
+          "_TZE200_wzk0x7fq",
+          "_TZE200_jfw0a4aa",
+          "HOBEIAN"
+        ],
+        "productId": [
+          "TS0601",
+          "ZG-102ZM"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              4,
+              5,
+              61184
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/ZG-102ZM/assets/icon.svg",
+          "instruction": {
+            "en": "Press and hold the reset button for 6 seconds until the indicator light flashes rapidly. The device is now in pairing mode.",
+            "nl": "Druk de reset knop 6 seconden in tot het lampje snel knippert. Het apparaat is nu in koppelmodus."
+          }
+        }
+      },
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Display Settings",
+            "nl": "Weergave Instellingen"
+          },
+          "children": [
+            {
+              "id": "display_mode",
+              "type": "dropdown",
+              "label": {
+                "en": "Display Mode",
+                "nl": "Weergavemodus"
+              },
+              "hint": {
+                "en": "Choose which sensor capabilities to display in the device UI",
+                "nl": "Kies welke sensormogelijkheden worden weergegeven in de apparaat UI"
+              },
+              "value": "both",
+              "values": [
+                {
+                  "id": "both",
+                  "label": {
+                    "en": "Vibration & Contact",
+                    "nl": "Trilling & Contact"
+                  }
+                },
+                {
+                  "id": "vibration",
+                  "label": {
+                    "en": "Vibration Only",
+                    "nl": "Alleen Trilling"
+                  }
+                },
+                {
+                  "id": "contact",
+                  "label": {
+                    "en": "Contact Only",
+                    "nl": "Alleen Contact"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Sensor Settings",
+            "nl": "Sensor Instellingen"
+          },
+          "children": [
+            {
+              "id": "sensitivity",
+              "type": "number",
+              "label": {
+                "en": "Vibration Sensitivity",
+                "nl": "Trillingsgevoeligheid"
+              },
+              "hint": {
+                "en": "The larger the value, the more sensitive the vibration detection (1-50). Changes are applied when the device wakes up.",
+                "nl": "Hoe hoger de waarde, hoe gevoeliger de trillingsdetectie (1-50). Wijzigingen worden toegepast wanneer het apparaat wakker wordt."
+              },
+              "value": 25,
+              "attr": {
+                "min": 1,
+                "max": 50,
+                "step": 1
               }
             }
           ]
