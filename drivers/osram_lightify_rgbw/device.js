@@ -28,7 +28,6 @@ const REPORT_DEBOUNCE_TIME = 2000;
 class OsramLightifyRGBWDevice extends ZigBeeDevice {
 
     async onNodeInit({ zclNode }) {
-        this.enableDebug();
         this.log('OSRAM Lightify RGBW initializing...');
 
         // Store the endpoint ID (OSRAM uses endpoint 3)
@@ -54,8 +53,6 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
             this.hasCapability('light_mode')) {
             await this.registerColorCapabilities({ zclNode });
         }
-
-        this.log('OSRAM Lightify RGBW initialized successfully');
     }
 
     // Cluster accessors
@@ -81,18 +78,7 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
     }
 
     async readInitialAttributes() {
-        this.log('Reading initial attributes...');
-
         try {
-            // Read basic cluster info
-            const basicAttrs = await this.zclNode.endpoints[this.endpointId].clusters.basic
-                .readAttributes(['manufacturerName', 'modelId', 'powerSource'])
-                .catch(err => {
-                    this.error('Failed to read basic attributes:', err);
-                    return {};
-                });
-            this.log('Basic attributes:', basicAttrs);
-
             // Read color control attributes
             const colorAttrs = await this.colorControlCluster.readAttributes([
                 'currentHue',
@@ -103,7 +89,6 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
                 this.error('Failed to read color control attributes:', err);
                 return {};
             });
-            this.log('Color control attributes:', colorAttrs);
 
             // Update initial capability values from device
             if (typeof colorAttrs.currentHue === 'number' && this.hasCapability('light_hue')) {
@@ -127,8 +112,6 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
     }
 
     registerOnOffAndDimCapabilities({ zclNode }) {
-        this.log('Registering on/off and dim capabilities...');
-
         // Register onoff capability
         this.registerCapability('onoff', CLUSTER.ON_OFF, {
             endpoint: this.endpointId,
@@ -143,10 +126,8 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
             endpoint: this.endpointId,
             set: 'moveToLevelWithOnOff',
             setParser: (value, opts) => {
-                const level = Math.round(value * MAX_DIM);
-                this.log(`Setting dim level to ${value} (${level})`);
                 return {
-                    level: level,
+                    level: Math.round(value * MAX_DIM),
                     transitionTime: calculateLevelControlTransitionTime(opts),
                 };
             },
@@ -157,22 +138,18 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
             },
             report: 'currentLevel',
             reportParser: value => {
-                const dimValue = value / MAX_DIM;
-                this.log(`Reported dim level: ${value} (${dimValue})`);
                 // Update onoff state based on dim level
                 if (value === 0) {
                     this.setCapabilityValue('onoff', false).catch(this.error);
                 } else if (this.getCapabilityValue('onoff') === false) {
                     this.setCapabilityValue('onoff', true).catch(this.error);
                 }
-                return dimValue;
+                return value / MAX_DIM;
             },
         });
     }
 
     async registerColorCapabilities({ zclNode }) {
-        this.log('Registering color capabilities...');
-
         // Build list of color capabilities to register together
         // Using registerMultipleCapabilities debounces changes so hue+saturation
         // are collected together before sending a single command
@@ -214,14 +191,6 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
                 const lightTemperatureChanged = typeof valueObj.light_temperature === 'number';
                 const lightModeChanged = typeof valueObj.light_mode === 'string';
 
-                this.log('Color capabilities changed (debounced):', {
-                    lightHueChanged,
-                    lightSaturationChanged,
-                    lightTemperatureChanged,
-                    lightModeChanged,
-                    values: valueObj,
-                });
-
                 // If hue or saturation changed, or mode switched to color
                 if (lightHueChanged || lightSaturationChanged || (lightModeChanged && valueObj.light_mode === 'color')) {
                     return this.changeColor(
@@ -253,56 +222,34 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
 
             // Listen for hue changes
             colorControl.on('attr.currentHue', value => {
-                const hueValue = value / MAX_HUE;
-                this.log(`Reported hue: ${value} (${hueValue})`);
-
                 // Ignore reports if we recently sent a command
-                if (Date.now() < this._ignoreHueReportsUntil) {
-                    this.log('Ignoring hue report (recently sent command)');
-                    return;
-                }
-
+                if (Date.now() < this._ignoreHueReportsUntil) return;
                 if (this.hasCapability('light_hue')) {
-                    this.setCapabilityValue('light_hue', hueValue).catch(this.error);
+                    this.setCapabilityValue('light_hue', value / MAX_HUE).catch(this.error);
                 }
             });
 
             // Listen for saturation changes
             colorControl.on('attr.currentSaturation', value => {
-                const satValue = value / MAX_SATURATION;
-                this.log(`Reported saturation: ${value} (${satValue})`);
-
                 // Ignore reports if we recently sent a command
-                if (Date.now() < this._ignoreSaturationReportsUntil) {
-                    this.log('Ignoring saturation report (recently sent command)');
-                    return;
-                }
-
+                if (Date.now() < this._ignoreSaturationReportsUntil) return;
                 if (this.hasCapability('light_saturation')) {
-                    this.setCapabilityValue('light_saturation', satValue).catch(this.error);
+                    this.setCapabilityValue('light_saturation', value / MAX_SATURATION).catch(this.error);
                 }
             });
 
             // Listen for color temperature changes
             colorControl.on('attr.colorTemperatureMireds', value => {
-                // Convert mireds to 0-1 scale (inverted: 0 = cool, 1 = warm)
-                const tempValue = (value - MIN_COLORTEMP_MIREDS) / (MAX_COLORTEMP_MIREDS - MIN_COLORTEMP_MIREDS);
-                this.log(`Reported color temperature: ${value} mireds (${tempValue})`);
-
                 // Ignore reports if we recently sent a command
-                if (Date.now() < this._ignoreColorTempReportsUntil) {
-                    this.log('Ignoring color temp report (recently sent command)');
-                    return;
-                }
-
+                if (Date.now() < this._ignoreColorTempReportsUntil) return;
                 if (this.hasCapability('light_temperature')) {
+                    const tempValue = (value - MIN_COLORTEMP_MIREDS) / (MAX_COLORTEMP_MIREDS - MIN_COLORTEMP_MIREDS);
                     this.setCapabilityValue('light_temperature', limitValue(tempValue, 0, 1)).catch(this.error);
                 }
             });
 
             // Listen for color mode changes
             colorControl.on('attr.colorMode', value => {
-                this.log(`Reported color mode: ${value}`);
                 if (this.hasCapability('light_mode')) {
                     const mode = (value === 'colorTemperatureMireds') ? 'temperature' : 'color';
                     this.setCapabilityValue('light_mode', mode).catch(this.error);
@@ -315,23 +262,9 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
     }
 
     async changeColor({ hue, saturation }, opts = {}) {
-        this.log('changeColor() ->', { hue, saturation });
-
         // Get current values if not provided
-        if (typeof hue !== 'number') {
-            hue = this.getCapabilityValue('light_hue') ?? 0;
-        }
-        if (typeof saturation !== 'number') {
-            saturation = this.getCapabilityValue('light_saturation') ?? 1;
-        }
-
-        const command = {
-            hue: Math.round(hue * MAX_HUE),
-            saturation: Math.round(saturation * MAX_SATURATION),
-            transitionTime: calculateColorControlTransitionTime(opts),
-        };
-
-        this.log('Sending moveToHueAndSaturation:', command);
+        if (typeof hue !== 'number') hue = this.getCapabilityValue('light_hue') ?? 0;
+        if (typeof saturation !== 'number') saturation = this.getCapabilityValue('light_saturation') ?? 1;
 
         // Set report suppression timestamps to prevent stale reports from reverting the change
         const suppressUntil = Date.now() + REPORT_DEBOUNCE_TIME;
@@ -339,13 +272,16 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
         this._ignoreSaturationReportsUntil = suppressUntil;
 
         try {
-            await this.colorControlCluster.moveToHueAndSaturation(command);
+            await this.colorControlCluster.moveToHueAndSaturation({
+                hue: Math.round(hue * MAX_HUE),
+                saturation: Math.round(saturation * MAX_SATURATION),
+                transitionTime: calculateColorControlTransitionTime(opts),
+            });
 
             // Update light_mode to color
             if (this.hasCapability('light_mode') && this.getCapabilityValue('light_mode') !== 'color') {
                 await this.setCapabilityValue('light_mode', 'color').catch(this.error);
             }
-
             return true;
         } catch (err) {
             this.error('Failed to change color:', err);
@@ -354,36 +290,23 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
     }
 
     async changeColorTemperature(temperature, opts = {}) {
-        this.log('changeColorTemperature() ->', temperature);
-
         // Get current value if not provided
-        if (typeof temperature !== 'number') {
-            temperature = this.getCapabilityValue('light_temperature') ?? 0.5;
-        }
-
-        // Convert 0-1 scale to mireds (0 = cool/low mireds, 1 = warm/high mireds)
-        const colorTemperatureMireds = Math.round(
-            MIN_COLORTEMP_MIREDS + (temperature * (MAX_COLORTEMP_MIREDS - MIN_COLORTEMP_MIREDS))
-        );
-
-        const command = {
-            colorTemperature: colorTemperatureMireds,
-            transitionTime: calculateColorControlTransitionTime(opts),
-        };
-
-        this.log('Sending moveToColorTemperature:', command);
+        if (typeof temperature !== 'number') temperature = this.getCapabilityValue('light_temperature') ?? 0.5;
 
         // Set report suppression timestamp to prevent stale reports from reverting the change
         this._ignoreColorTempReportsUntil = Date.now() + REPORT_DEBOUNCE_TIME;
 
         try {
-            await this.colorControlCluster.moveToColorTemperature(command);
+            // Convert 0-1 scale to mireds (0 = cool/low mireds, 1 = warm/high mireds)
+            await this.colorControlCluster.moveToColorTemperature({
+                colorTemperature: Math.round(MIN_COLORTEMP_MIREDS + (temperature * (MAX_COLORTEMP_MIREDS - MIN_COLORTEMP_MIREDS))),
+                transitionTime: calculateColorControlTransitionTime(opts),
+            });
 
             // Update light_mode to temperature
             if (this.hasCapability('light_mode') && this.getCapabilityValue('light_mode') !== 'temperature') {
                 await this.setCapabilityValue('light_mode', 'temperature').catch(this.error);
             }
-
             return true;
         } catch (err) {
             this.error('Failed to change color temperature:', err);
@@ -393,8 +316,6 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
 
     // Handle device coming back online
     async onEndDeviceAnnounce() {
-        this.log('Device announced - refreshing state...');
-
         try {
             // Read current state
             const [onOffAttrs, levelAttrs, colorAttrs] = await Promise.all([
@@ -412,30 +333,23 @@ class OsramLightifyRGBWDevice extends ZigBeeDevice {
             if (typeof onOffAttrs.onOff === 'boolean') {
                 await this.setCapabilityValue('onoff', onOffAttrs.onOff).catch(this.error);
             }
-
             if (typeof levelAttrs.currentLevel === 'number') {
                 await this.setCapabilityValue('dim', levelAttrs.currentLevel / MAX_DIM).catch(this.error);
             }
-
             if (typeof colorAttrs.currentHue === 'number' && this.hasCapability('light_hue')) {
                 await this.setCapabilityValue('light_hue', colorAttrs.currentHue / MAX_HUE).catch(this.error);
             }
-
             if (typeof colorAttrs.currentSaturation === 'number' && this.hasCapability('light_saturation')) {
                 await this.setCapabilityValue('light_saturation', colorAttrs.currentSaturation / MAX_SATURATION).catch(this.error);
             }
-
             if (typeof colorAttrs.colorTemperatureMireds === 'number' && this.hasCapability('light_temperature')) {
                 const tempValue = (colorAttrs.colorTemperatureMireds - MIN_COLORTEMP_MIREDS) / (MAX_COLORTEMP_MIREDS - MIN_COLORTEMP_MIREDS);
                 await this.setCapabilityValue('light_temperature', limitValue(tempValue, 0, 1)).catch(this.error);
             }
-
             if (colorAttrs.colorMode && this.hasCapability('light_mode')) {
                 const mode = (colorAttrs.colorMode === 'colorTemperatureMireds') ? 'temperature' : 'color';
                 await this.setCapabilityValue('light_mode', mode).catch(this.error);
             }
-
-            this.log('Device state refreshed successfully');
         } catch (err) {
             this.error('Error refreshing device state:', err);
         }
