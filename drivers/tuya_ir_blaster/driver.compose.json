@@ -1,39 +1,20 @@
 {
-  "id": "tuya_ir_blaster",
   "name": {
-    "en": "Tuya IR Blaster (ZS06)"
+    "en": "ZS06 Smart IR Remote"
   },
   "class": "other",
+  "icon": "/drivers/tuya_ir_blaster/assets/icon.svg",
   "capabilities": [
-    "ir_learn_slot",
-    "ir_learn_button",
-    "ir_test_button"
+    "button.learn_ir",
+    "measure_battery"
   ],
-  "capabilitiesOptions": {
-    "ir_learn_slot": {
-      "title": {
-        "en": "IR Slot"
-      }
-    },
-    "ir_learn_button": {
-      "title": {
-        "en": "Learn IR Code"
-      }
-    },
-    "ir_test_button": {
-      "title": {
-        "en": "Transmit"
-      }
-    }
+  "images": {
+    "small": "/drivers/tuya_ir_blaster/assets/images/small.png",
+    "large": "/drivers/tuya_ir_blaster/assets/images/large.png"
   },
-  "platforms": [
-    "local"
-  ],
-  "connectivity": [
-    "zigbee"
-  ],
   "zigbee": {
     "manufacturerName": [
+      "_TZ3290_yyax9ajf",
       "_TZ3290_7v1k4vufotpowp9z",
       "_TZ3290_rlkmy85q4pzoxobl",
       "_TZ3290_jxvzqatwgsaqzx1u",
@@ -41,7 +22,8 @@
       "_TZ3290_uc8lwbi2",
       "_TZ3290_nba3knpsarkawgnt",
       "_TZ3290_8xzb2ghn",
-      "_TZ3290_s6ezpa3j"
+      "_TZ3290_s6ezpa3j",
+      "_TZ3290_yac64inudpovoaba"
     ],
     "productId": [
       "TS1201"
@@ -50,23 +32,189 @@
       "1": {
         "clusters": [
           0,
+          1,
+          3,
           4,
           5,
-          60672,
-          60673
-        ],
-        "bindings": []
+          6,
+          57348,
+          60672
+        ]
       }
     },
     "learnmode": {
-      "image": "{{driverAssetsPath}}/icon.svg",
+      "image": "/drivers/tuya_ir_blaster/assets/learn.svg",
       "instruction": {
-        "en": "Press and hold the reset button on the IR Blaster for 5 seconds until the LED starts flashing rapidly. The device will then appear in the device list."
+        "en": "Make sure the device is powered on. The device should automatically be discovered when in range of your Homey."
       }
     }
   },
-  "images": {
-    "large": "{{driverAssetsPath}}/images/large.png",
-    "small": "{{driverAssetsPath}}/images/small.png"
-  }
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "Last Learned IR Code"
+      },
+      "children": [
+        {
+          "id": "last_learned_code",
+          "type": "textarea",
+          "label": { "en": "Last Learned Code (copy to a slot below)" },
+          "value": "",
+          "hint": { "en": "This field is automatically updated when you learn a new IR code. Copy the code and paste it into one of the slots below." }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": {
+        "en": "IR Slots (1-5)"
+      },
+      "children": [
+        {
+          "id": "ir_label_1",
+          "type": "text",
+          "label": { "en": "Slot 1 Name" },
+          "value": "Button 1"
+        },
+        {
+          "id": "ir_code_1",
+          "type": "text",
+          "label": { "en": "Slot 1 Code (Base64)" },
+          "value": ""
+        },
+        {
+          "id": "ir_label_2",
+          "type": "text",
+          "label": { "en": "Slot 2 Name" },
+          "value": "Button 2"
+        },
+        {
+          "id": "ir_code_2",
+          "type": "text",
+          "label": { "en": "Slot 2 Code (Base64)" },
+          "value": ""
+        },
+        {
+          "id": "ir_label_3",
+          "type": "text",
+          "label": { "en": "Slot 3 Name" },
+          "value": "Button 3"
+        },
+        {
+          "id": "ir_code_3",
+          "type": "text",
+          "label": { "en": "Slot 3 Code (Base64)" },
+          "value": ""
+        },
+        {
+          "id": "ir_label_4",
+          "type": "text",
+          "label": { "en": "Slot 4 Name" },
+          "value": "Button 4"
+        },
+        {
+          "id": "ir_code_4",
+          "type": "text",
+          "label": { "en": "Slot 4 Code (Base64)" },
+          "value": ""
+        },
+        {
+          "id": "ir_label_5",
+          "type": "text",
+          "label": { "en": "Slot 5 Name" },
+          "value": "Button 5"
+        },
+        {
+          "id": "ir_code_5",
+          "type": "text",
+          "label": { "en": "Slot 5 Code (Base64)" },
+          "value": ""
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": {
+        "en": "IR Slots (6-10)"
+      },
+      "children": [
+        {
+          "id": "ir_label_6",
+          "type": "text",
+          "label": { "en": "Slot 6 Name" },
+          "value": "Button 6"
+        },
+        {
+          "id": "ir_code_6",
+          "type": "text",
+          "label": { "en": "Slot 6 Code (Base64)" },
+          "value": ""
+        },
+        {
+          "id": "ir_label_7",
+          "type": "text",
+          "label": { "en": "Slot 7 Name" },
+          "value": "Button 7"
+        },
+        {
+          "id": "ir_code_7",
+          "type": "text",
+          "label": { "en": "Slot 7 Code (Base64)" },
+          "value": ""
+        },
+        {
+          "id": "ir_label_8",
+          "type": "text",
+          "label": { "en": "Slot 8 Name" },
+          "value": "Button 8"
+        },
+        {
+          "id": "ir_code_8",
+          "type": "text",
+          "label": { "en": "Slot 8 Code (Base64)" },
+          "value": ""
+        },
+        {
+          "id": "ir_label_9",
+          "type": "text",
+          "label": { "en": "Slot 9 Name" },
+          "value": "Button 9"
+        },
+        {
+          "id": "ir_code_9",
+          "type": "text",
+          "label": { "en": "Slot 9 Code (Base64)" },
+          "value": ""
+        },
+        {
+          "id": "ir_label_10",
+          "type": "text",
+          "label": { "en": "Slot 10 Name" },
+          "value": "Button 10"
+        },
+        {
+          "id": "ir_code_10",
+          "type": "text",
+          "label": { "en": "Slot 10 Code (Base64)" },
+          "value": ""
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": {
+        "en": "Debug"
+      },
+      "children": [
+        {
+          "id": "debug_logs",
+          "type": "checkbox",
+          "label": { "en": "Enable verbose logs" },
+          "value": false,
+          "hint": { "en": "Turn on to show detailed IR chunk logs and payload previews." }
+        }
+      ]
+    }
+  ]
 }

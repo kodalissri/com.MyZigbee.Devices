@@ -1,0 +1,20 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Soil Moisture"
+  },
+  "desc": {
+    "en": "Soil moisture level in percentage"
+  },
+  "units": {
+    "en": "%"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/soil_moisture.svg",
+  "min": 0,
+  "max": 100,
+  "step": 1,
+  "insights": true
+}

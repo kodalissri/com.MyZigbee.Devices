@@ -1,0 +1,165 @@
+{
+  "id": "ZG-303Z",
+  "name": {
+    "en": "ZG-303Z Soil Sensor"
+  },
+  "class": "sensor",
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "zigbee"
+  ],
+  "capabilities": [
+    "measure_soil_moisture",
+    "measure_temperature",
+    "measure_humidity",
+    "measure_battery",
+    "alarm_water_shortage"
+  ],
+  "capabilitiesOptions": {
+    "measure_temperature": {
+      "title": {
+        "en": "Soil Temperature"
+      }
+    },
+    "measure_humidity": {
+      "title": {
+        "en": "Air Humidity"
+      }
+    }
+  },
+  "zigbee": {
+    "manufacturerName": ["HOBEIAN", "_TZE200_wqashyqo", "_TZE200_npj9bug3", "_TZE200_wrmhp6b3"],
+    "productId": ["ZG-303Z", "TS0601"],
+    "endpoints": {
+      "1": {
+        "clusters": [
+          0,
+          1,
+          3,
+          61184
+        ]
+      }
+    },
+    "learnmode": {
+      "image": "/drivers/ZG-303Z/assets/icon.svg",
+      "instruction": {
+        "en": "Press and hold the reset button for 6 seconds until the indicator light flashes rapidly. The device is now in pairing mode.",
+        "nl": "Druk de reset knop 6 seconden in tot het lampje snel knippert. Het apparaat is nu in koppelmodus."
+      }
+    }
+  },
+  "energy": {
+    "batteries": [
+      "AAA",
+      "AAA"
+    ]
+  },
+  "images": {
+    "small": "/drivers/ZG-303Z/assets/images/small.png",
+    "large": "/drivers/ZG-303Z/assets/images/large.png"
+  },
+  "settings": [
+    {
+      "id": "temperature_calibration",
+      "type": "number",
+      "label": {
+        "en": "Temperature Calibration"
+      },
+      "hint": {
+        "en": "Offset in °C applied by the sensor (-2.0 to +2.0). Takes effect on next report."
+      },
+      "min": -2,
+      "max": 2,
+      "value": 0
+    },
+    {
+      "id": "humidity_calibration",
+      "type": "number",
+      "label": {
+        "en": "Humidity Calibration"
+      },
+      "hint": {
+        "en": "Offset to adjust humidity readings (-30 to +30)"
+      },
+      "min": -30,
+      "max": 30,
+      "value": 0
+    },
+    {
+      "id": "soil_calibration",
+      "type": "number",
+      "label": {
+        "en": "Soil Moisture Calibration"
+      },
+      "hint": {
+        "en": "Offset to adjust soil moisture readings (-30 to +30)"
+      },
+      "min": -30,
+      "max": 30,
+      "value": 0
+    },
+    {
+      "id": "temperature_sampling",
+      "type": "number",
+      "label": {
+        "en": "Temperature/Humidity Sampling Interval"
+      },
+      "hint": {
+        "en": "How often the sensor measures/reports temperature & humidity (5-3600 seconds). Takes effect on next report."
+      },
+      "min": 5,
+      "max": 3600,
+      "value": 1800,
+      "units": {
+        "en": "seconds"
+      }
+    },
+    {
+      "id": "soil_sampling",
+      "type": "number",
+      "label": {
+        "en": "Soil Moisture Sampling Interval"
+      },
+      "hint": {
+        "en": "How often the sensor measures/reports soil moisture (5-3600 seconds). Takes effect on next report."
+      },
+      "min": 5,
+      "max": 3600,
+      "value": 1800,
+      "units": {
+        "en": "seconds"
+      }
+    },
+    {
+      "id": "soil_warning",
+      "type": "number",
+      "label": {
+        "en": "Soil Dryness Threshold"
+      },
+      "hint": {
+        "en": "Moisture percentage below which water alarm triggers (0-100%)"
+      },
+      "min": 0,
+      "max": 100,
+      "value": 30,
+      "units": {
+        "en": "%"
+      }
+    }
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

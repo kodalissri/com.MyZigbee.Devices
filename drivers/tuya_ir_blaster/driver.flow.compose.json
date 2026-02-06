@@ -3,79 +3,59 @@
     {
       "id": "ir_code_learned",
       "title": {
-        "en": "IR code learned"
+        "en": "IR Code Learned"
       },
       "titleFormatted": {
-        "en": "IR code learned in slot [[slot_name]]"
-      },
-      "hint": {
-        "en": "Triggered when an IR code has been successfully learned from a remote control."
+        "en": "IR code learned: [[code]]"
       },
       "tokens": [
         {
-          "name": "slot_number",
+          "name": "code",
           "type": "string",
           "title": {
-            "en": "Slot Number"
+            "en": "Learned Code"
           },
-          "example": "1"
-        },
-        {
-          "name": "slot_name",
-          "type": "string",
-          "title": {
-            "en": "Slot Name"
-          },
-          "example": "TV Power"
+          "example": "base64data..."
         }
       ]
     }
   ],
   "actions": [
     {
-      "id": "learn_ir_code",
+      "id": "send_ir_slot",
       "title": {
-        "en": "Learn IR code"
+        "en": "Send IR from slot"
       },
       "titleFormatted": {
-        "en": "Learn IR code for [[slot_number]]"
-      },
-      "hint": {
-        "en": "Start learning mode. Point your remote at the IR blaster and press the button you want to learn."
+        "en": "Send IR from slot [[slot]]"
       },
       "args": [
         {
-          "name": "slot_number",
-          "type": "autocomplete",
-          "title": {
-            "en": "IR Code Slot"
-          },
-          "placeholder": {
-            "en": "Select or search slot"
+          "name": "slot",
+          "type": "number",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": {
+            "en": "Slot Number"
           }
         }
       ]
     },
     {
-      "id": "blast_ir_code",
+      "id": "send_ir_code",
       "title": {
-        "en": "Blast IR code"
+        "en": "Send custom IR code"
       },
       "titleFormatted": {
-        "en": "Blast IR code [[slot_number]]"
-      },
-      "hint": {
-        "en": "Send the learned IR code to control your device."
+        "en": "Send custom IR code [[code]]"
       },
       "args": [
         {
-          "name": "slot_number",
-          "type": "autocomplete",
-          "title": {
-            "en": "IR Code Slot"
-          },
+          "name": "code",
+          "type": "text",
           "placeholder": {
-            "en": "Select or search slot"
+            "en": "Paste Base64 code here"
           }
         }
       ]

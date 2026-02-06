@@ -1,0 +1,14 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Water Shortage Alarm"
+  },
+  "desc": {
+    "en": "Indicates when soil moisture is below threshold"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/drivers/ZG-303Z/assets/soil_moisture_alarm.svg",
+  "insights": true
+}

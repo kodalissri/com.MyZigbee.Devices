@@ -1,0 +1,30 @@
+{
+  "id": "compare_ir_codes",
+  "title": {
+    "en": "IR codes are equal"
+  },
+  "titleFormatted": {
+    "en": "IR codes [[code_a]] and [[code_b]] are equal"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=tuya_ir_blaster"
+    },
+    {
+      "name": "code_a",
+      "type": "text",
+      "placeholder": {
+        "en": "First base64 code"
+      }
+    },
+    {
+      "name": "code_b",
+      "type": "text",
+      "placeholder": {
+        "en": "Second base64 code"
+      }
+    }
+  ]
+}

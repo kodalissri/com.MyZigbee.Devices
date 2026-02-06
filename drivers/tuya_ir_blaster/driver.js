@@ -2,82 +2,135 @@
 
 const { Driver } = require('homey');
 
-/**
- * Zosung IR Blaster Driver
- *
- * Manages Zosung IR Blaster devices and registers flow cards for
- * learning and blasting IR codes.
- */
-class ZosungIRBlasterDriver extends Driver {
+// Import and ensure clusters are registered before any device is initialized
+const ZosungIRTransmitCluster = require('../../lib/ZosungIRTransmitCluster');
+const ZosungIRControlCluster = require('../../lib/ZosungIRControlCluster');
+
+class ZS06IRRemoteDriver extends Driver {
 
     async onInit() {
-        this.log('Zosung IR Blaster Driver initialized');
+        this.log('ZS06 IR Remote Driver initialized');
+        this.log('Zosung IR Transmit cluster registered with ID:', ZosungIRTransmitCluster.ID);
+        this.log('Zosung IR Control cluster registered with ID:', ZosungIRControlCluster.ID);
 
-        // Register trigger: IR code learned
-        this.irCodeLearnedTrigger = this.homey.flow.getDeviceTriggerCard('ir_code_learned');
+        // Register flow action cards
+        this._registerFlowCards();
+    }
 
-        // Register action: Learn IR code
-        this.homey.flow.getActionCard('learn_ir_code')
-            .registerRunListener(async (args) => {
-                this.log(`Learning IR code for slot ${args.slot_number}`);
-                await args.device.startLearning(parseInt(args.slot_number));
-            })
-            .registerArgumentAutocompleteListener('slot_number', async (query, args) => {
-                // Get the number of configured IR slots
-                const numberOfSlots = args.device.getSetting('number_of_ir_codes') || 10;
-                const results = [];
+    _registerFlowCards() {
+        // Send IR from slot action
+        const sendSlotAction = this.homey.flow.getActionCard('send_ir_slot');
+        sendSlotAction.registerRunListener(async (args, state) => {
+            this.log('═══════════════════════════════════════════════════════════');
+            this.log('[Flow] send_ir_slot triggered');
+            this.log('[Flow] Device:', args.device ? args.device.getName() : 'unknown');
+            this.log('[Flow] Slot:', args.slot);
 
-                for (let i = 1; i <= numberOfSlots; i++) {
-                    const slotName = args.device.getSetting(`ir_name_${i}`) || `IR Code ${i}`;
-                    const slotCode = args.device.getSetting(`ir_code_${i}`);
+            const device = args.device;
+            const slotIndex = args.slot;
+            const settings = device.getSettings();
 
-                    // Filter by query if provided
-                    if (!query || slotName.toLowerCase().includes(query.toLowerCase()) || i.toString().includes(query)) {
-                        results.push({
-                            id: i.toString(),
-                            name: `${i}. ${slotName}${slotCode ? ' ✓' : ''}`,
-                            description: slotCode ? 'IR code stored' : 'Empty slot'
-                        });
-                    }
-                }
+            this.log('[Flow] Settings keys:', Object.keys(settings));
+            this.log('[Flow] Looking for key: ir_code_' + slotIndex);
 
-                return results;
-            });
+            const code = settings[`ir_code_${slotIndex}`];
+            this.log('[Flow] Code found:', !!code);
+            this.log('[Flow] Code length:', code ? code.length : 0);
 
-        // Register action: Blast IR code
-        this.homey.flow.getActionCard('blast_ir_code')
-            .registerRunListener(async (args) => {
-                this.log(`Blasting IR code from slot ${args.slot_number}`);
-                await args.device.blastIRCode(parseInt(args.slot_number));
-            })
-            .registerArgumentAutocompleteListener('slot_number', async (query, args) => {
-                // Get the number of configured IR slots
-                const numberOfSlots = args.device.getSetting('number_of_ir_codes') || 10;
-                const results = [];
+            if (!code || code.length < 5) {
+                this.error('[Flow] ERROR: Slot', slotIndex, 'is empty or invalid');
+                throw new Error(`Slot ${slotIndex} is empty or invalid.`);
+            }
 
-                for (let i = 1; i <= numberOfSlots; i++) {
-                    const slotName = args.device.getSetting(`ir_name_${i}`) || `IR Code ${i}`;
-                    const slotCode = args.device.getSetting(`ir_code_${i}`);
+            this.log('[Flow] Code preview:', code.substring(0, 50) + '...');
+            this.log('[Flow] Calling device.initiateIRSend()...');
 
-                    // Only show slots with stored IR codes
-                    if (slotCode) {
-                        // Filter by query if provided
-                        if (!query || slotName.toLowerCase().includes(query.toLowerCase()) || i.toString().includes(query)) {
-                            results.push({
-                                id: i.toString(),
-                                name: `${i}. ${slotName}`,
-                                description: 'IR code ready to blast'
-                            });
-                        }
-                    }
-                }
+            try {
+                const result = await device.initiateIRSend(code);
+                this.log('[Flow] initiateIRSend completed successfully');
+                return result;
+            } catch (err) {
+                this.error('[Flow] initiateIRSend failed:', err.message);
+                throw err;
+            }
+        });
+        this.log('Registered send_ir_slot action');
 
-                return results;
-            });
+        // Send custom IR code action
+        const sendCodeAction = this.homey.flow.getActionCard('send_ir_code');
+        sendCodeAction.registerRunListener(async (args, state) => {
+            this.log('═══════════════════════════════════════════════════════════');
+            this.log('[Flow] send_ir_code triggered');
+            this.log('[Flow] Device:', args.device ? args.device.getName() : 'unknown');
+            this.log('[Flow] Code length:', args.code ? args.code.length : 0);
 
-        this.log('Flow cards registered');
+            const device = args.device;
+            if (!args.code || args.code.length < 5) {
+                this.error('[Flow] ERROR: Invalid IR code');
+                throw new Error('Invalid IR code');
+            }
+
+            this.log('[Flow] Code preview:', args.code.substring(0, 50) + '...');
+            this.log('[Flow] Calling device.initiateIRSend()...');
+
+            try {
+                const result = await device.initiateIRSend(args.code);
+                this.log('[Flow] initiateIRSend completed successfully');
+                return result;
+            } catch (err) {
+                this.error('[Flow] initiateIRSend failed:', err.message);
+                throw err;
+            }
+        });
+        this.log('Registered send_ir_code action');
+
+        // Compare IR codes condition
+        const compareCondition = this.homey.flow.getConditionCard('compare_ir_codes');
+        compareCondition.registerRunListener(async (args, state) => {
+            const result = this._compareIrCodes(args.code_a, args.code_b);
+            this.log('[Flow] compare_ir_codes:', JSON.stringify(result));
+            return result.equal;
+        });
+        this.log('Registered compare_ir_codes condition');
+
+        this.log('Flow action cards registered');
+    }
+
+    async onPairListDevices() {
+        // ZigBee devices are discovered automatically
+        return [];
+    }
+
+    _compareIrCodes(codeA, codeB) {
+        const a = (codeA || '').toString().replace(/\s+/g, '');
+        const b = (codeB || '').toString().replace(/\s+/g, '');
+
+        if (!a || !b) {
+            return { equal: false, similarity: 0, lenA: 0, lenB: 0, reason: 'empty_code' };
+        }
+
+        const bufA = Buffer.from(a, 'base64');
+        const bufB = Buffer.from(b, 'base64');
+
+        const lenA = bufA.length;
+        const lenB = bufB.length;
+
+        if (lenA === 0 || lenB === 0) {
+            return { equal: false, similarity: 0, lenA, lenB, reason: 'invalid_base64' };
+        }
+
+        const minLen = Math.min(lenA, lenB);
+        let same = 0;
+        for (let i = 0; i < minLen; i++) {
+            if (bufA[i] === bufB[i]) same++;
+        }
+
+        const similarity = minLen === 0 ? 0 : Math.round((same / minLen) * 1000) / 1000;
+        const equal = lenA === lenB && similarity === 1;
+
+        return { equal, similarity, lenA, lenB };
     }
 
 }
 
-module.exports = ZosungIRBlasterDriver;
+module.exports = ZS06IRRemoteDriver;
