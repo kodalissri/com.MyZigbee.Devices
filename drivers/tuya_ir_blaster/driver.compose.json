@@ -49,6 +49,9 @@
       }
     }
   },
+  "energy": {
+    "batteries": ["AAA", "AAA"]
+  },
   "settings": [
     {
       "type": "group",
