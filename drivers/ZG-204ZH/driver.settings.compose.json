@@ -42,15 +42,21 @@
     "values": [
       {
         "id": "0",
-        "label": { "en": "PIR Only" }
+        "label": {
+          "en": "PIR Only"
+        }
       },
       {
         "id": "1",
-        "label": { "en": "PIR and Radar" }
+        "label": {
+          "en": "PIR and Radar"
+        }
       },
       {
         "id": "2",
-        "label": { "en": "Radar only" }
+        "label": {
+          "en": "Radar only"
+        }
       }
     ]
   },
@@ -70,6 +76,38 @@
     }
   },
   {
+    "id": "indicator",
+    "type": "checkbox",
+    "label": {
+      "en": "LED indicator",
+      "nl": "LED indicator"
+    },
+    "value": true
+  },
+  {
+    "id": "temperature_unit",
+    "type": "dropdown",
+    "label": {
+      "en": "Temperature unit",
+      "nl": "Temperatuur eenheid"
+    },
+    "value": "0",
+    "values": [
+      {
+        "id": "0",
+        "label": {
+          "en": "Celsius"
+        }
+      },
+      {
+        "id": "1",
+        "label": {
+          "en": "Fahrenheit"
+        }
+      }
+    ]
+  },
+  {
     "id": "illuminance_update_interval",
     "type": "number",
     "label": {
@@ -83,5 +121,27 @@
       "en": "Minutes",
       "nl": "Minutes"
     }
+  },
+  {
+    "id": "temperature_calibration",
+    "type": "number",
+    "label": {
+      "nl": "Temperatuur kalibratie",
+      "en": "Temperature calibration"
+    },
+    "value": 0,
+    "min": -10,
+    "max": 10
+  },
+  {
+    "id": "humidity_calibration",
+    "type": "number",
+    "label": {
+      "nl": "Luchtvochtigheid kalibratie",
+      "en": "Humidity calibration"
+    },
+    "value": 0,
+    "min": -10,
+    "max": 10
   }
 ]

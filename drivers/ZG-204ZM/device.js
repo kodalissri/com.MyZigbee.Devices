@@ -17,6 +17,7 @@ const dataPoints = {
     fadingTime: 102,         // Motion keep time (seconds)
     illuminance: 106,        // Light sensing (lux)
     battery: 121,            // Battery percentage
+    indicator: 107,         // LED indicator
 };
 
 const dataTypes = {
@@ -94,8 +95,15 @@ class PIRRadarSensorMulti extends TuyaSpecificClusterDevice {
                 break;
 
             case dataPoints.radarDetectionDistance:
-                this.log("Radar Detection Distance:", value);
+                const meters = value / 100;
+                this.log("Radar Detection Distance:", value, "(", meters, "m)");
                 break;
+
+            case dataPoints.indicator:
+                this.log("Indicator:", value);
+                this.setSettings({ indicator: Boolean(value) }).catch(() => {});
+                break;
+
 
             case dataPoints.illuminance:
                 this.log("Illuminance:", value, "lux");
@@ -132,13 +140,20 @@ class PIRRadarSensorMulti extends TuyaSpecificClusterDevice {
                 await this.writeData32(dataPoints.fadingTime, newSettings['fading_time']);
             }
             if (changedKeys.includes('radar_distance_detection')) {
-                await this.writeData32(dataPoints.radarDetectionDistance, newSettings['radar_distance_detection']);
+                const meters = Number(newSettings['radar_distance_detection']);
+                const scaled = Math.round(meters * 100);
+                await this.writeData32(dataPoints.radarDetectionDistance, scaled);
+                this.log('Radar detection distance set:', meters, 'm (raw:', scaled, ')');
             }
             if (changedKeys.includes('PIR_sensitivity')) {
                 await this.writeData32(dataPoints.motionDetectionSensitivity, newSettings['PIR_sensitivity']);
             }
             if (changedKeys.includes('motion_detection_mode')) {
                 await this.writeData32(dataPoints.motionDetectionMode, newSettings['motion_detection_mode']);
+            }
+
+            if (changedKeys.includes('indicator')) {
+                await this.writeBool(dataPoints.indicator, newSettings['indicator']);
             }
             this.log('Settings changed:', changedKeys);
         }

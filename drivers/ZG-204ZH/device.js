@@ -9,7 +9,7 @@ Cluster.addCluster(TuyaSpecificCluster);
 // Data Points for TS0601 (_TZE200_rhgsbacq) - HOBEIAN ZG-204ZV Profile
 const dataPoints = {
     presenceState: 1,        // Motion/Presence detection
-    radarSensitivity: 2,     // Radar sensitivity (0-19)
+    radarSensitivity: 2,     // Radar sensitivity (0-10)
     radarDetectionDistance: 4,  // Radar Distance 0-10m step value 0.01)
     ledindicator: 108,      // Led indicator
     humidity: 101,           // Relative humidity (value %)
@@ -20,9 +20,9 @@ const dataPoints = {
     illuminationInterval: 107,       // Illumination Update interval
     tempunit: 109,      // temperature units c to f
     temperaturecaliberation: 105,
-    humiditycaliberation: 107,
+    humiditycaliberation: 104,
     motionStates: 103,           // none, large, small, scatic
-    motionDetectionMode: 122,       // ["only_pir", "pir_and_radar", "only_radar"])
+    motionDetectionMode: 112,       // ["only_pir", "pir_and_radar", "only_radar"])
     motionDetectionSensitivity: 123,    // PIR sensitivity (0-10) step value 1
 };
 
@@ -65,6 +65,24 @@ const getDataValue = (dpValue) => {
     }
 };
 
+const localTempCalibration2 = {
+    from: (v) => v,
+    to: (v) => {
+        if (v < 0) return v + 0x100000000;
+        return v;
+    },
+};
+const localTempCalibration3 = {
+    from: (v) => {
+        if (v > 0x7fffffff) v -= 0x100000000;
+        return v / 10;
+    },
+    to: (v) => {
+        if (v > 0) return v * 10;
+        if (v < 0) return v * 10 + 0x100000000;
+        return v;
+    },
+};
 class RadarSensorMulti1 extends TuyaSpecificClusterDevice {
     async onNodeInit({ zclNode }) {
         this.printNode();
@@ -101,8 +119,20 @@ class RadarSensorMulti1 extends TuyaSpecificClusterDevice {
                 break;
 
             case dataPoints.radarDetectionDistance:
-                this.log("Radar Detection Distance:", value);
+                const meters = value / 100;
+                this.log("Radar Detection Distance:", value, "(", meters, "m)");
                 break;
+
+            case dataPoints.ledindicator:
+                this.log("Indicator:", value);
+                this.setSettings({ indicator: Boolean(value) }).catch(() => {});
+                break;
+
+            case dataPoints.tempunit:
+                this.log("Temperature unit:", value);
+                this.setSettings({ temperature_unit: String(value) }).catch(() => {});
+                break;
+
 
             case dataPoints.illuminance:
                 this.log("Illuminance:", value, "lux");
@@ -119,6 +149,21 @@ class RadarSensorMulti1 extends TuyaSpecificClusterDevice {
                 const humidityValue = value;
                 this.log("Humidity:", humidityValue, "%");
                 this.setCapabilityValue('measure_humidity', humidityValue).catch(this.error);
+                break;
+
+            case dataPoints.temperaturecaliberation:
+                {
+                    const calib = localTempCalibration3.from(value);
+                    this.log("Temperature calibration:", calib);
+                    this.setSettings({ temperature_calibration: calib }).catch(() => {});
+                }
+                break;
+            case dataPoints.humiditycaliberation:
+                {
+                    const calib = localTempCalibration2.from(value);
+                    this.log("Humidity calibration:", calib);
+                    this.setSettings({ humidity_calibration: calib }).catch(() => {});
+                }
                 break;
 
             case dataPoints.battery:
@@ -151,16 +196,32 @@ class RadarSensorMulti1 extends TuyaSpecificClusterDevice {
                 await this.writeData32(dataPoints.fadingTime, newSettings['fading_time']);
             }
             if (changedKeys.includes('radar_distance_detection')) {
-                await this.writeData32(dataPoints.radarDetectionDistance, newSettings['radar_distance_detection']);
+                const meters = Number(newSettings['radar_distance_detection']);
+                const scaled = Math.round(meters * 100);
+                await this.writeData32(dataPoints.radarDetectionDistance, scaled);
+                this.log('Radar detection distance set:', meters, 'm (raw:', scaled, ')');
             }
             if (changedKeys.includes('PIR_sensitivity')) {
                 await this.writeData32(dataPoints.motionDetectionSensitivity, newSettings['PIR_sensitivity']);
             }
             if (changedKeys.includes('motion_detection_mode')) {
-                await this.writeData32(dataPoints.motionDetectionMode, newSettings['motion_detection_mode']);
+                await this.writeEnum(dataPoints.motionDetectionMode, Number(newSettings['motion_detection_mode']));
+            }
+
+            if (changedKeys.includes('indicator')) {
+                await this.writeBool(dataPoints.ledindicator, newSettings['indicator']);
+            }
+            if (changedKeys.includes('temperature_unit')) {
+                await this.writeEnum(dataPoints.tempunit, Number(newSettings['temperature_unit']));
             }
             if (changedKeys.includes('illuminance_update_interval')) {
                 await this.writeData32(dataPoints.illuminationInterval, newSettings['illuminance_update_interval']);
+            }
+            if (changedKeys.includes('temperature_calibration')) {
+                await this.writeData32(dataPoints.temperaturecaliberation, localTempCalibration3.to(newSettings['temperature_calibration']));
+            }
+            if (changedKeys.includes('humidity_calibration')) {
+                await this.writeData32(dataPoints.humiditycaliberation, localTempCalibration2.to(newSettings['humidity_calibration']));
             }
             this.log('Settings changed:', changedKeys);
         }
@@ -170,3 +231,13 @@ class RadarSensorMulti1 extends TuyaSpecificClusterDevice {
     }
 }
 module.exports = RadarSensorMulti1;
+
+
+
+
+
+
+
+
+
+

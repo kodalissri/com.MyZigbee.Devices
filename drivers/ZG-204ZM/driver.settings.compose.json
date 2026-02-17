@@ -25,12 +25,22 @@
     "id": "radar_distance_detection",
     "type": "number",
     "label": {
-      "en": "Radar detection Distance in Meters (.01m steps)",
-      "nl": "Radar detection Distance in Meters (.01m steps)"
+      "en": "Radar detection Distance in Meters (.01m steps, max 6m)",
+      "nl": "Radar detection Distance in Meters (.01m steps, max 6m)"
     },
     "value": 7,
     "min": 0,
-    "max": 10
+    "max": 6,
+    "step": 0.01
+  },
+  {
+    "id": "indicator",
+    "type": "checkbox",
+    "label": {
+      "en": "LED indicator",
+      "nl": "LED indicator"
+    },
+    "value": true
   },
   {
     "id": "motion_detection_mode",
@@ -42,15 +52,21 @@
     "values": [
       {
         "id": "0",
-        "label": { "en": "PIR Only" }
+        "label": {
+          "en": "PIR Only"
+        }
       },
       {
         "id": "1",
-        "label": { "en": "PIR and Radar" }
+        "label": {
+          "en": "PIR and Radar"
+        }
       },
-      { 
+      {
         "id": "2",
-        "label": { "en": "Radar only" }
+        "label": {
+          "en": "Radar only"
+        }
       }
     ]
   },

@@ -16,6 +16,10 @@ const dataPoints = {
     battery: 110,            // Battery percentage
     temperature: 111,       // Temperature (value/10 °C)
     illuminationInterval: 107,       // Illumination Update interval
+    indicator: 108,         // LED indicator
+    tempunit: 109,          // temperature units c to f
+    temperaturecaliberation: 105,
+    humiditycaliberation: 104,
 };
 
 const dataTypes = {
@@ -57,6 +61,27 @@ const getDataValue = (dpValue) => {
     }
 };
 
+
+const localTempCalibration2 = {
+    from: (v) => v,
+    to: (v) => {
+        if (v < 0) return v + 0x100000000;
+        return v;
+    },
+};
+
+const localTempCalibration3 = {
+    from: (v) => {
+        if (v > 0x7fffffff) v -= 0x100000000;
+        return v / 10;
+    },
+    to: (v) => {
+        if (v > 0) return v * 10;
+        if (v < 0) return v * 10 + 0x100000000;
+        return v;
+    },
+};
+
 class RadarSensorMulti extends TuyaSpecificClusterDevice {
     async onNodeInit({ zclNode }) {
         this.printNode();
@@ -71,7 +96,7 @@ class RadarSensorMulti extends TuyaSpecificClusterDevice {
         switch (dp) {
             case dataPoints.presenceState:
                 this.log("Motion state:", value);
-                this.setCapabilityValue('alarm_motion', Boolean(value)).catch(this.error);
+                this.setCapabilityValue('alarm_presence', Boolean(value)).catch(this.error);
                 break;
 
             case dataPoints.radarSensitivity:
@@ -106,6 +131,33 @@ class RadarSensorMulti extends TuyaSpecificClusterDevice {
                 this.log("Fading time:", value, "seconds");
                 break;
 
+            case dataPoints.indicator:
+                this.log("Indicator:", value);
+                this.setSettings({ indicator: Boolean(value) }).catch(() => {});
+                break;
+
+            case dataPoints.tempunit:
+                this.log("Temperature unit:", value);
+                this.setSettings({ temperature_unit: String(value) }).catch(() => {});
+                break;
+
+            case dataPoints.temperaturecaliberation:
+                {
+                    const calib = localTempCalibration3.from(value);
+                    this.log("Temperature calibration:", calib);
+                    this.setSettings({ temperature_calibration: calib }).catch(() => {});
+                }
+                break;
+
+            case dataPoints.humiditycaliberation:
+                {
+                    const calib = localTempCalibration2.from(value);
+                    this.log("Humidity calibration:", calib);
+                    this.setSettings({ humidity_calibration: calib }).catch(() => {});
+                }
+                break;
+
+
             default:
                 this.log("Unhandled data point:", dp, "value:", value);
                 break;
@@ -126,6 +178,25 @@ class RadarSensorMulti extends TuyaSpecificClusterDevice {
             }
             if (changedKeys.includes('illuminance_update_interval')) {
                 await this.writeData32(dataPoints.illuminationInterval, newSettings['illuminance_update_interval']);
+            }
+
+            if (changedKeys.includes('indicator')) {
+                await this.writeBool(dataPoints.indicator, newSettings['indicator']);
+            }
+            if (changedKeys.includes('temperature_unit')) {
+                await this.writeEnum(dataPoints.tempunit, Number(newSettings['temperature_unit']));
+            }
+            if (changedKeys.includes('temperature_calibration')) {
+                await this.writeData32(
+                    dataPoints.temperaturecaliberation,
+                    localTempCalibration3.to(newSettings['temperature_calibration']),
+                );
+            }
+            if (changedKeys.includes('humidity_calibration')) {
+                await this.writeData32(
+                    dataPoints.humiditycaliberation,
+                    localTempCalibration2.to(newSettings['humidity_calibration']),
+                );
             }
             this.log('Settings changed:', changedKeys);
         }
