@@ -1,4 +1,7 @@
 {
+  "1.1.18": {
+    "en": "Fixed IR blaster, changed icons"
+  },
   "1.1.17": {
     "en": "Added ZG-102ZM contact vibration sensor"
   },
