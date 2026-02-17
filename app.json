@@ -1079,6 +1079,38 @@
           }
         },
         {
+          "id": "indicator",
+          "type": "checkbox",
+          "label": {
+            "en": "LED indicator",
+            "nl": "LED indicator"
+          },
+          "value": true
+        },
+        {
+          "id": "temperature_unit",
+          "type": "dropdown",
+          "label": {
+            "en": "Temperature unit",
+            "nl": "Temperatuur eenheid"
+          },
+          "value": "0",
+          "values": [
+            {
+              "id": "0",
+              "label": {
+                "en": "Celsius"
+              }
+            },
+            {
+              "id": "1",
+              "label": {
+                "en": "Fahrenheit"
+              }
+            }
+          ]
+        },
+        {
           "id": "illuminance_update_interval",
           "type": "number",
           "label": {
@@ -1092,6 +1124,28 @@
             "en": "Minutes",
             "nl": "Minutes"
           }
+        },
+        {
+          "id": "temperature_calibration",
+          "type": "number",
+          "label": {
+            "nl": "Temperatuur kalibratie",
+            "en": "Temperature calibration"
+          },
+          "value": 0,
+          "min": -10,
+          "max": 10
+        },
+        {
+          "id": "humidity_calibration",
+          "type": "number",
+          "label": {
+            "nl": "Luchtvochtigheid kalibratie",
+            "en": "Humidity calibration"
+          },
+          "value": 0,
+          "min": -10,
+          "max": 10
         }
       ]
     },
@@ -1346,12 +1400,22 @@
           "id": "radar_distance_detection",
           "type": "number",
           "label": {
-            "en": "Radar detection Distance in Meters (.01m steps)",
-            "nl": "Radar detection Distance in Meters (.01m steps)"
+            "en": "Radar detection Distance in Meters (.01m steps, max 6m)",
+            "nl": "Radar detection Distance in Meters (.01m steps, max 6m)"
           },
           "value": 7,
           "min": 0,
-          "max": 10
+          "max": 6,
+          "step": 0.01
+        },
+        {
+          "id": "indicator",
+          "type": "checkbox",
+          "label": {
+            "en": "LED indicator",
+            "nl": "LED indicator"
+          },
+          "value": true
         },
         {
           "id": "motion_detection_mode",
@@ -1415,7 +1479,7 @@
         "measure_luminance",
         "measure_temperature",
         "measure_humidity",
-        "alarm_motion",
+        "alarm_presence",
         "measure_battery"
       ],
       "images": {
@@ -1479,6 +1543,38 @@
           "max": 19
         },
         {
+          "id": "indicator",
+          "type": "checkbox",
+          "label": {
+            "en": "LED indicator",
+            "nl": "LED indicator"
+          },
+          "value": true
+        },
+        {
+          "id": "temperature_unit",
+          "type": "dropdown",
+          "label": {
+            "en": "Temperature unit",
+            "nl": "Temperatuur eenheid"
+          },
+          "value": "0",
+          "values": [
+            {
+              "id": "0",
+              "label": {
+                "en": "Celsius"
+              }
+            },
+            {
+              "id": "1",
+              "label": {
+                "en": "Fahrenheit"
+              }
+            }
+          ]
+        },
+        {
           "id": "fading_time",
           "type": "number",
           "label": {
@@ -1507,6 +1603,28 @@
             "en": "Minutes",
             "nl": "Minutes"
           }
+        },
+        {
+          "id": "temperature_calibration",
+          "type": "number",
+          "label": {
+            "en": "Temperature calibration",
+            "nl": "Temperatuur kalibratie"
+          },
+          "value": 0,
+          "min": -10,
+          "max": 10
+        },
+        {
+          "id": "humidity_calibration",
+          "type": "number",
+          "label": {
+            "en": "Humidity calibration",
+            "nl": "Luchtvochtigheid kalibratie"
+          },
+          "value": 0,
+          "min": -10,
+          "max": 10
         }
       ]
     },
@@ -1825,6 +1943,12 @@
             "en": "Make sure the device is powered on. The device should automatically be discovered when in range of your Homey."
           }
         }
+      },
+      "energy": {
+        "batteries": [
+          "AAA",
+          "AAA"
+        ]
       },
       "settings": [
         {
