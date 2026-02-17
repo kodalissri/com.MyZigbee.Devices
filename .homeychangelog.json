@@ -1,4 +1,7 @@
 {
+  "1.1.19": {
+    "en": "Fixed motion sensor distance settings, added snzb-03"
+  },
   "1.1.18": {
     "en": "Fixed IR blaster, changed icons"
   },

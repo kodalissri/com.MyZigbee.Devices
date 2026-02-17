@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.MyZigbee.Devices",
-  "version": "1.1.18",
+  "version": "1.1.19",
   "compatibility": ">=12.4.0",
   "sdk": 3,
   "platforms": [
@@ -591,6 +591,62 @@
         }
       },
       "id": "RWL000"
+    },
+    {
+      "id": "SNZB-03",
+      "name": {
+        "en": "Motion Sensor SNZB-03"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "alarm_motion",
+        "measure_battery",
+        "alarm_battery"
+      ],
+      "images": {
+        "large": "/drivers/SNZB-03/assets/images/large.png",
+        "small": "/drivers/SNZB-03/assets/images/small.png"
+      },
+      "energy": {
+        "batteries": [
+          "CR2450"
+        ]
+      },
+      "zigbee": {
+        "manufacturerName": [
+          "eWeLink",
+          "SONOFF",
+          "Zbeacon"
+        ],
+        "productId": [
+          "SNZB-03",
+          "MS01",
+          "MSO1",
+          "CK-TLSR8656-SS5-01(7002)",
+          "RHK09",
+          "SQ510A",
+          "SNZB-03_eWeLink"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              1,
+              3,
+              32,
+              1280
+            ],
+            "bindings": []
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/SNZB-03/assets/learn.svg",
+          "instruction": {
+            "en": "Press and hold the reset button for 6 seconds until the LED blinks rapidly. The device is now in pairing mode."
+          }
+        }
+      },
+      "settings": []
     },
     {
       "id": "SNZB-04",
