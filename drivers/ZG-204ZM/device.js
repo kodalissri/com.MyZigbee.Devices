@@ -29,6 +29,7 @@ const dataTypes = {
     bitmap: 5,
 };
 
+
 const convertMultiByteNumberPayloadToSingleDecimalNumber = (chunks) => {
     let value = 0;
     for (let i = 0; i < chunks.length; i++) {
@@ -64,6 +65,7 @@ class PIRRadarSensorMulti extends TuyaSpecificClusterDevice {
         this.printNode();
 
         zclNode.endpoints[1].clusters.tuya.on("response", value => this.handleDataPoint(value));
+        zclNode.endpoints[1].clusters.tuya.on("reporting", value => this.handleDataPoint(value));
     }
 
     async handleDataPoint(data) {
@@ -72,57 +74,52 @@ class PIRRadarSensorMulti extends TuyaSpecificClusterDevice {
 
         switch (dp) {
             case dataPoints.presenceState:
-                this.log("Presence state:", value);
                 this.setCapabilityValue('alarm_presence', Boolean(value)).catch(this.error);
                 break;
 
             case dataPoints.motionStates:
-                const motionState = value
-                this.log("Motion State:", value);
-                this.setCapabilityValue('Motion_State_Capability', String(motionState)).catch(this.error); 
+                this.setCapabilityValue('Motion_State_Capability', String(value)).catch(this.error);
                 break;
 
             case dataPoints.radarSensitivity:
-                this.log("Radar sensitivity:", value);
+                this._lastRadarSensReport = { value: Number(value), ts: Date.now() };
+                this.setSettings({ radar_sensitivity: Number(value) }).catch(() => {});
                 break;
 
             case dataPoints.motionDetectionMode:
-                this.log("Motion Detection Mode:", value);
+                this._lastModeReport = { value: Number(value), ts: Date.now() };
+                this.setSettings({ motion_detection_mode: String(value) }).catch(() => {});
                 break;
 
             case dataPoints.motionDetectionSensitivity:
-                this.log("Motion detection Sensitivity:", value);
+                this._lastPirSensReport = { value: Number(value), ts: Date.now() };
+                this.setSettings({ PIR_sensitivity: Number(value) }).catch(() => {});
                 break;
 
             case dataPoints.radarDetectionDistance:
-                const meters = value / 100;
-                this.log("Radar Detection Distance:", value, "(", meters, "m)");
+                this._lastDistanceReport = { value: Number(value), ts: Date.now() };
+                this.setSettings({ radar_distance_detection: value / 100 }).catch(() => {});
                 break;
 
             case dataPoints.indicator:
-                this.log("Indicator:", value);
                 this.setSettings({ indicator: Boolean(value) }).catch(() => {});
                 break;
 
-
             case dataPoints.illuminance:
-                this.log("Illuminance:", value, "lux");
                 this.setCapabilityValue('measure_luminance', value).catch(this.error);
                 break;
 
             case dataPoints.battery:
-                const batteryValue = value;
-                this.log("Battery:", value, "%");
-                // Battery capability could be added if needed
-                this.setCapabilityValue('measure_battery', batteryValue).catch(this.error);
+                this.setCapabilityValue('measure_battery', value).catch(this.error);
                 break;
 
             case dataPoints.fadingTime:
-                this.log("Fading time:", value, "seconds");
+                this._lastFadingTimeReport = { value: Number(value), ts: Date.now() };
+                this.setSettings({ fading_time: Number(value) }).catch(() => {});
                 break;
 
             default:
-                this.log("Unhandled data point:", dp, "value:", value);
+                this.log("Unhandled DP:", dp, "value:", value);
                 break;
         }
     }
@@ -131,25 +128,81 @@ class PIRRadarSensorMulti extends TuyaSpecificClusterDevice {
         this.log("PIR Radar Multi-Sensor removed");
     }
 
+    async _waitForReport(getReport, expectedValue, timeoutMs = 3000) {
+        const start = Date.now();
+        while (Date.now() - start < timeoutMs) {
+            const last = getReport();
+            if (last && last.value === expectedValue && Date.now() - last.ts < 5000) {
+                return true;
+            }
+            await new Promise(resolve => setTimeout(resolve, 250));
+        }
+        return false;
+    }
+
     async onSettings({ newSettings, changedKeys }) {
         try {
             if (changedKeys.includes('radar_sensitivity')) {
-                await this.writeData32(dataPoints.radarSensitivity, newSettings['radar_sensitivity']);
+                const val = Number(newSettings['radar_sensitivity']);
+                try {
+                    await this.writeData32(dataPoints.radarSensitivity, val);
+                } catch (err) {
+                    if (await this._waitForReport(() => this._lastRadarSensReport, val)) {
+                        this.log('Radar sensitivity write returned FAILURE but matching report received; treating as success');
+                    } else {
+                        throw err;
+                    }
+                }
             }
             if (changedKeys.includes('fading_time')) {
-                await this.writeData32(dataPoints.fadingTime, newSettings['fading_time']);
+                const val = Number(newSettings['fading_time']);
+                try {
+                    await this.writeData32(dataPoints.fadingTime, val);
+                } catch (err) {
+                    if (await this._waitForReport(() => this._lastFadingTimeReport, val)) {
+                        this.log('Fading time write returned FAILURE but matching report received; treating as success');
+                    } else {
+                        throw err;
+                    }
+                }
             }
             if (changedKeys.includes('radar_distance_detection')) {
                 const meters = Number(newSettings['radar_distance_detection']);
                 const scaled = Math.round(meters * 100);
-                await this.writeData32(dataPoints.radarDetectionDistance, scaled);
-                this.log('Radar detection distance set:', meters, 'm (raw:', scaled, ')');
+                try {
+                    await this.writeData32(dataPoints.radarDetectionDistance, scaled);
+                    this.log('Radar detection distance set:', meters, 'm (raw:', scaled, ')');
+                } catch (err) {
+                    if (await this._waitForReport(() => this._lastDistanceReport, scaled)) {
+                        this.log('Radar distance write returned FAILURE but matching report received; treating as success');
+                    } else {
+                        throw err;
+                    }
+                }
             }
             if (changedKeys.includes('PIR_sensitivity')) {
-                await this.writeData32(dataPoints.motionDetectionSensitivity, newSettings['PIR_sensitivity']);
+                const val = Number(newSettings['PIR_sensitivity']);
+                try {
+                    await this.writeData32(dataPoints.motionDetectionSensitivity, val);
+                } catch (err) {
+                    if (await this._waitForReport(() => this._lastPirSensReport, val)) {
+                        this.log('PIR sensitivity write returned FAILURE but matching report received; treating as success');
+                    } else {
+                        throw err;
+                    }
+                }
             }
             if (changedKeys.includes('motion_detection_mode')) {
-                await this.writeData32(dataPoints.motionDetectionMode, newSettings['motion_detection_mode']);
+                const mode = Number(newSettings['motion_detection_mode']);
+                try {
+                    await this.writeData32(dataPoints.motionDetectionMode, mode);
+                } catch (err) {
+                    if (await this._waitForReport(() => this._lastModeReport, mode)) {
+                        this.log('Motion mode write returned FAILURE but matching report received; treating as success');
+                    } else {
+                        throw err;
+                    }
+                }
             }
 
             if (changedKeys.includes('indicator')) {
