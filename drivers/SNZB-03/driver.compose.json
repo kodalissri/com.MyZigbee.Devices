@@ -48,7 +48,7 @@
     "learnmode": {
       "image": "{{driverAssetsPath}}/learn.svg",
       "instruction": {
-        "en": "Press and hold the reset button for 6 seconds until the LED blinks rapidly. The device is now in pairing mode."
+        "en": "Press and hold the reset button for 5 seconds until the LED blinks rapidly. The device is now in pairing mode."
       }
     }
   },

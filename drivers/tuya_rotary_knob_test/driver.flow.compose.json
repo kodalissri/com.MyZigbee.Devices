@@ -1,7 +1,7 @@
 {
   "triggers": [
     {
-      "id": "rotate_left",
+      "id": "rotate_left_test",
       "title": {
         "en": "Rotated left",
         "nl": "Naar links gedraaid"
@@ -32,7 +32,7 @@
       ]
     },
     {
-      "id": "rotate_right",
+      "id": "rotate_right_test",
       "title": {
         "en": "Rotated right",
         "nl": "Naar rechts gedraaid"
@@ -63,18 +63,18 @@
       ]
     },
     {
-      "id": "single_press",
+      "id": "single_press_test",
       "title": {
         "en": "Single press",
         "nl": "Enkele druk"
       },
       "hint": {
         "en": "Triggered when the knob is pressed once",
-        "nl": "Geactiveerd wanneer de knop ��n keer wordt ingedrukt"
+        "nl": "Geactiveerd wanneer de knop \u00ef\u00bf\u00bd\u00ef\u00bf\u00bdn keer wordt ingedrukt"
       }
     },
     {
-      "id": "double_press",
+      "id": "double_press_test",
       "title": {
         "en": "Double press",
         "nl": "Dubbele druk"
@@ -85,7 +85,7 @@
       }
     },
     {
-      "id": "long_press",
+      "id": "long_press_test",
       "title": {
         "en": "Long press",
         "nl": "Lange druk"
@@ -96,7 +96,7 @@
       }
     },
     {
-      "id": "toggle_action",
+      "id": "toggle_action_test",
       "title": {
         "en": "Toggle action",
         "nl": "Schakelactie"

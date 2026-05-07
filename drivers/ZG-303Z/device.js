@@ -13,8 +13,8 @@ const DP_HANDLERS = {
     // DP 1: Water warning (enum: 0=none, 1=alarm)
     1: { handler: 'waterWarning' },
 
-    // DP 103: Temperature (divided by 10)
-    103: { handler: 'temperature', divideBy: 10 },
+    // DP 101: Temperature (divided by 10) — new firmware
+    101: { handler: 'temperature', divideBy: 10 },
 
     // DP 107: Soil Moisture (raw percentage)
     107: { handler: 'soilMoisture' },
@@ -35,11 +35,10 @@ const DP_HANDLERS = {
     112: { handler: 'setting' },  // soil_sampling interval
 
     // Legacy DPs (for other firmware variants - keep for compatibility)
-    3: { handler: 'temperature', divideBy: 10 },
-    5: { handler: 'soilMoisture' },
-    14: { handler: 'humidity' },
+    3: { handler: 'soilMoisture' },
+    5: { handler: 'temperature', divideBy: 10 },
+    14: { handler: 'waterWarning' },
     15: { handler: 'battery' },
-    16: { handler: 'waterWarning' },
 };
 
 // Datapoint IDs for writing settings (based on Zigbee2MQTT)
@@ -145,6 +144,12 @@ class ZG303ZSoilSensor extends TuyaSpecificClusterDevice {
 
         // Detect if this is a sleepy (battery-powered) device
         const isSleepy = this.isDeviceSleepy();
+
+        // Send magic packet on first pairing to wake device and trigger initial reporting
+        const isFirstInit = typeof this.isFirstInit === 'function' ? this.isFirstInit() : false;
+        if (isFirstInit) {
+            await this.configureMagicPacket(endpoint).catch(this.error);
+        }
 
         // Set up Tuya cluster listeners
         this.setupTuyaListeners(zclNode);
@@ -460,6 +465,21 @@ class ZG303ZSoilSensor extends TuyaSpecificClusterDevice {
         // Read battery status
         if (this.endpoint1) {
             await this.readBattery(this.endpoint1).catch(this.error);
+        }
+    }
+
+    async configureMagicPacket(endpoint) {
+        try {
+            await endpoint.clusters.basic.readAttributes([
+                'manufacturerName',
+                'zclVersion',
+                'appVersion',
+                'modelId',
+                'powerSource',
+                0xfffe,
+            ]);
+        } catch (err) {
+            this.error('configureMagicPacket failed:', err);
         }
     }
 
