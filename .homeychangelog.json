@@ -1,4 +1,7 @@
 {
+  "1.1.22": {
+    "en": "Fix zig-303z"
+  },
   "1.1.21": {
     "en": "made changes to Dp write for zg-204z"
   },
