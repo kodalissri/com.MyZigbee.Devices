@@ -1,4 +1,7 @@
 {
+  "1.1.24": {
+    "en": "Add state feedback subscriptions, fix fan UI quick actions"
+  },
   "1.1.23": {
     "en": "Add Omnibreeze fan and mqtt support"
   },
