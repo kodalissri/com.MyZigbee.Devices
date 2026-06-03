@@ -1,4 +1,7 @@
 {
+  "1.1.23": {
+    "en": "Add Omnibreeze fan and mqtt support"
+  },
   "1.1.22": {
     "en": "Fix zig-303z"
   },
