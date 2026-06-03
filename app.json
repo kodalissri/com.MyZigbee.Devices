@@ -2757,6 +2757,129 @@
           ]
         }
       ]
+    },
+    {
+      "name": {
+        "en": "OmniBreeze Fan"
+      },
+      "class": "fan",
+      "capabilities": [
+        "onoff",
+        "dim",
+        "fan_mode",
+        "oscillating",
+        "measure_temperature"
+      ],
+      "capabilitiesOptions": {
+        "dim": {
+          "title": {
+            "en": "Fan Speed"
+          },
+          "min": 0,
+          "max": 1,
+          "step": 0.25
+        },
+        "measure_temperature": {
+          "title": {
+            "en": "Temperature"
+          }
+        }
+      },
+      "virtual": true,
+      "icon": "/drivers/virtual_fan/assets/icon.svg",
+      "images": {
+        "large": "/drivers/virtual_fan/assets/images/large.png",
+        "small": "/drivers/virtual_fan/assets/images/small.png"
+      },
+      "settings": [
+        {
+          "id": "mqtt_broker",
+          "type": "text",
+          "label": {
+            "en": "MQTT Broker Host"
+          },
+          "hint": {
+            "en": "IP address or hostname of your MQTT broker (e.g. 192.168.1.100)"
+          },
+          "value": ""
+        },
+        {
+          "id": "mqtt_port",
+          "type": "number",
+          "label": {
+            "en": "MQTT Broker Port"
+          },
+          "hint": {
+            "en": "Default is 1883"
+          },
+          "value": 1883,
+          "min": 1,
+          "max": 65535
+        },
+        {
+          "id": "mqtt_username",
+          "type": "text",
+          "label": {
+            "en": "MQTT Username (optional)"
+          },
+          "value": ""
+        },
+        {
+          "id": "mqtt_password",
+          "type": "password",
+          "label": {
+            "en": "MQTT Password (optional)"
+          },
+          "value": ""
+        },
+        {
+          "id": "mqtt_topic",
+          "type": "text",
+          "label": {
+            "en": "MQTT Topic Prefix"
+          },
+          "hint": {
+            "en": "e.g. omnibreeze-fan-1"
+          },
+          "value": "omnibreeze-fan-1"
+        },
+        {
+          "id": "beep",
+          "type": "checkbox",
+          "label": {
+            "en": "Beep"
+          },
+          "hint": {
+            "en": "Enable or disable beep sound on button press"
+          },
+          "value": true
+        },
+        {
+          "id": "display_leds",
+          "type": "checkbox",
+          "label": {
+            "en": "Display LEDs"
+          },
+          "hint": {
+            "en": "Enable or disable the display panel LEDs"
+          },
+          "value": true
+        }
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "virtual_fan"
     }
   ],
   "capabilities": {
@@ -2817,6 +2940,41 @@
           "id": "rotate_right",
           "title": {
             "en": "Turned Right"
+          }
+        }
+      ]
+    },
+    "fan_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Fan Mode"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "normal",
+          "title": {
+            "en": "Normal"
+          }
+        },
+        {
+          "id": "natural",
+          "title": {
+            "en": "Natural"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto"
           }
         }
       ]
@@ -3006,6 +3164,19 @@
       ],
       "icon": "/drivers/ZG-204ZM/assets/movement.svg"
     },
+<<<<<<< HEAD
+=======
+    "oscillating": {
+      "type": "boolean",
+      "title": {
+        "en": "Oscillating"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/icon.svg"
+    },
+>>>>>>> e334439 (Add OmniBreeze virtual fan driver with MQTT support)
     "smart_knob_mode": {
       "type": "enum",
       "title": {

@@ -162,6 +162,11 @@ class ZG303ZSoilSensor extends TuyaSpecificClusterDevice {
         if (!isSleepy) {
             await this.applyDeviceSettings().catch(this.error);
             await this.readBattery(endpoint).catch(this.error);
+        } else {
+            // Queue a settings push for the first time the device wakes up.
+            // Writing settings during the wake window keeps the device awake
+            // long enough that it responds with its current sensor values.
+            this.pendingSettingsApply = true;
         }
     }
 
@@ -237,11 +242,16 @@ class ZG303ZSoilSensor extends TuyaSpecificClusterDevice {
     processTuyaReport(args) {
         if (!args) return;
 
-        const { dp, datatype, data } = args;
+        const { dp, datatype, data, length } = args;
 
         if (typeof dp === 'number' && data) {
+            // Slice to just the bytes for this DP using the reported length.
+            // ZCLDataTypes.buffer reads all remaining bytes, so 'data' may
+            // contain multiple concatenated DPs if the device sent them in one frame.
             const buffer = Buffer.isBuffer(data) ? data : Buffer.from(Array.isArray(data) ? data : [data]);
-            this.processDataPoint(dp, datatype || 0, buffer);
+            const dpLen = typeof length === 'number' ? length : buffer.length;
+            const dpData = buffer.slice(0, dpLen);
+            this.processDataPoint(dp, datatype || 0, dpData);
         }
     }
 
