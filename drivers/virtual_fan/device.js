@@ -64,11 +64,19 @@ class OmniBreezeFanDevice extends Device {
 
     this._mqttClient.on('connect', () => {
       this.log('MQTT connected');
-      // Subscribe to temperature topic
-      const tempTopic = `${topic}/${TOPIC_TEMPERATURE}`;
-      this._mqttClient.subscribe(tempTopic, (err) => {
-        if (err) this.error('Failed to subscribe to temperature topic:', err);
-        else this.log(`Subscribed to ${tempTopic}`);
+      // Subscribe to all state feedback topics from the device
+      const subscriptions = [
+        `${topic}/1/get`,   // power state
+        `${topic}/2/get`,   // mode state
+        `${topic}/3/get`,   // speed state
+        `${topic}/5/get`,   // oscillation state
+        `${topic}/${TOPIC_TEMPERATURE}`,  // temperature (read-only)
+      ];
+      subscriptions.forEach((t) => {
+        this._mqttClient.subscribe(t, (err) => {
+          if (err) this.error(`Failed to subscribe to ${t}:`, err);
+          else this.log(`Subscribed to ${t}`);
+        });
       });
     });
 
@@ -111,12 +119,39 @@ class OmniBreezeFanDevice extends Device {
   }
 
   _handleMqttMessage(topic, message) {
-    const tempTopic = `${this._activeTopic}/${TOPIC_TEMPERATURE}`;
+    const base = this._activeTopic;
+    const val = message.trim();
 
-    if (topic === tempTopic) {
-      const temp = parseFloat(message);
+    if (topic === `${base}/1/get`) {
+      const on = val === '1' || val.toLowerCase() === 'true';
+      this.log(`State update — onoff: ${on}`);
+      this.setCapabilityValue('onoff', on).catch(this.error);
+
+    } else if (topic === `${base}/2/get`) {
+      const modeIndex = parseInt(val, 10);
+      const modeKey = Object.keys(MODE_MAP).find((k) => MODE_MAP[k] === modeIndex);
+      if (modeKey) {
+        this.log(`State update — fan_mode: ${modeKey}`);
+        this.setCapabilityValue('fan_mode', modeKey).catch(this.error);
+      }
+
+    } else if (topic === `${base}/3/get`) {
+      const speed = parseInt(val, 10);
+      if (speed >= 1 && speed <= 5) {
+        const dim = (speed - 1) / 4;
+        this.log(`State update — speed: ${speed} → dim: ${dim}`);
+        this.setCapabilityValue('dim', dim).catch(this.error);
+      }
+
+    } else if (topic === `${base}/5/get`) {
+      const oscillating = val === '1' || val.toLowerCase() === 'true';
+      this.log(`State update — oscillating: ${oscillating}`);
+      this.setCapabilityValue('oscillating', oscillating).catch(this.error);
+
+    } else if (topic === `${base}/${TOPIC_TEMPERATURE}`) {
+      const temp = parseFloat(val);
       if (!isNaN(temp)) {
-        this.log(`Temperature update: ${temp}°C`);
+        this.log(`State update — temperature: ${temp}°C`);
         this.setCapabilityValue('measure_temperature', temp).catch(this.error);
       }
     }
