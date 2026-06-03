@@ -11,11 +11,19 @@
     "measure_temperature"
   ],
   "capabilitiesOptions": {
+    "onoff": {
+      "title": { "en": "Power" },
+      "uiQuickAction": false
+    },
     "dim": {
       "title": { "en": "Fan Speed" },
       "min": 0,
       "max": 1,
       "step": 0.25
+    },
+    "oscillating": {
+      "title": { "en": "Oscillation" },
+      "uiQuickAction": false
     },
     "measure_temperature": {
       "title": { "en": "Temperature" }
