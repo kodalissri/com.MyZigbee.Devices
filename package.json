@@ -9,6 +9,7 @@
   "dependencies": {
     "homey-zigbeedriver": "^2.1.4",
     "zigbee-clusters": "^2.6.0",
-    "mqtt": "^5.3.4"
+    "mqtt": "^5.3.4",
+    "@2colors/esphome-native-api": "latest"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "type": "string",
+  "title": {
+    "en": "HRV Status"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false
+}

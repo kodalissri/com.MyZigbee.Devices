@@ -1,0 +1,11 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Status"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/connection_status.svg",
+  "insights": false
+}

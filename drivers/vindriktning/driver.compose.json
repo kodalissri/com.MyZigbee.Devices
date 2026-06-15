@@ -1,0 +1,83 @@
+{
+  "name": {
+    "en": "VINDRIKTNING Air Quality"
+  },
+  "class": "sensor",
+  "capabilities": [
+    "measure_pm25",
+    "alarm_motion",
+    "measure_signal_strength"
+  ],
+  "capabilitiesOptions": {
+    "measure_pm25": {
+      "title": { "en": "PM2.5" }
+    },
+    "alarm_motion": {
+      "title": { "en": "Motion (LD2410)" }
+    },
+    "measure_signal_strength": {
+      "title": { "en": "WiFi Signal" }
+    }
+  },
+  "energy": {
+    "approximation": {
+      "usageConstant": 1
+    }
+  },
+  "virtual": true,
+  "icon": "{{driverAssetsPath}}/icon.svg",
+  "images": {
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "small": "{{driverAssetsPath}}/images/small.png"
+  },
+  "settings": [
+    {
+      "id": "mqtt_broker",
+      "type": "text",
+      "label": { "en": "MQTT Broker Host" },
+      "hint": { "en": "IP address or hostname of your MQTT broker (e.g. 10.10.10.250)" },
+      "value": "10.10.10.250"
+    },
+    {
+      "id": "mqtt_port",
+      "type": "number",
+      "label": { "en": "MQTT Broker Port" },
+      "hint": { "en": "Default is 1883" },
+      "value": 1883,
+      "min": 1,
+      "max": 65535
+    },
+    {
+      "id": "mqtt_username",
+      "type": "text",
+      "label": { "en": "MQTT Username (optional)" },
+      "value": ""
+    },
+    {
+      "id": "mqtt_password",
+      "type": "password",
+      "label": { "en": "MQTT Password (optional)" },
+      "value": ""
+    },
+    {
+      "id": "mqtt_topic",
+      "type": "text",
+      "label": { "en": "Tasmota Topic" },
+      "hint": { "en": "The device Topic set in Tasmota (Configuration -> Configure MQTT -> Topic). Subscribes to tele/<topic>/SENSOR, tele/<topic>/STATE and stat/<topic>/RESULT" },
+      "value": "VINDRIKTNING_1"
+    }
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}
