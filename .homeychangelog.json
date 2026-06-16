@@ -1,4 +1,7 @@
 {
+  "1.1.26": {
+    "en": "added vindriktning"
+  },
   "1.1.24": {
     "en": "Add state feedback subscriptions, fix fan UI quick actions"
   },
